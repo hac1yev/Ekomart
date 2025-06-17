@@ -1,5 +1,4 @@
-import ProductSidebar from "@/components/Products/ProductSidebar";
-import ProductsMain from "@/components/Products/ProductsMain";
+import ProductsWrapper from "@/components/Products/ProductsWrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -27,12 +26,7 @@ const ProductsPage = () => {
             </div>
 
             <div className="shop-grid-sidebar-area rts-section-gap">
-                <div className="container">
-                    <div className="row g-0">
-                        <ProductSidebar />
-                        <ProductsMain />
-                    </div>
-                </div>
+                <ProductsWrapper />
             </div>
         </>
     );

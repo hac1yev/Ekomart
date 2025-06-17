@@ -2,7 +2,6 @@
 
 import ProductsFilterSelect from "./ProductsFilterSelect";
 import ProductsPagination from "./ProductsPagination";
-import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent";
 import { useTypedLoadingSelector } from "@/store/loading-slice";
@@ -32,16 +31,14 @@ const ProductsMain = () => {
   // }, []);
 
   return (
-    <Suspense>
-      <div className="col-xl-9 col-lg-12 products-main-wrapper">
-        <ProductsFilterSelect />
-        {totalProducts === 0 && !isLoading && (
-          <h4 className="text-center my-4">There is no product.</h4>
-        )} 
-        <AllProducts products={products} />
-        <ProductsPagination />
-      </div>
-    </Suspense>
+    <div className="col-xl-9 col-lg-12 products-main-wrapper">
+      <ProductsFilterSelect />
+      {totalProducts === 0 && !isLoading && (
+        <h4 className="text-center my-4">There is no product.</h4>
+      )} 
+      <AllProducts products={products} />
+      <ProductsPagination />
+    </div>
   );
 };
 

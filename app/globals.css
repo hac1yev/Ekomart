@@ -18637,6 +18637,7 @@ li.with-megamenu:hover .rts-megamenu {
   padding-top: 15px;
   position: relative;
   height: 170px;
+  width: 100%;
 }
 
 .single-shopping-card-one.tranding-product .body-content {
@@ -29111,6 +29112,33 @@ header.header-three .sub-dropdown .submenu.third-lvl.base {
 .featured-skeleton-image {
   height: 250px;
   width: 100%;
+}
+
+.trending-skeleton-image {
+  width: 113px!important;
+  height: 100px;
+}
+
+.tranding-product-skeleton {
+  flex-direction: row!important;
+}
+
+.tranding-product-skeleton .body-content {
+  width: 61%!important;
+}
+
+.single-discount-skeleton {
+  padding: 40px 50px;
+  background: #fff;
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.discount-skeleton-img {
+  width: 100%;
+  height: 186px;
 }
 
 .loading-overlay {

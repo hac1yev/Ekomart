@@ -171,7 +171,7 @@ const RegisterForm = () => {
                                             <Image width={30} height={30} src={google} alt="login" priority />
                                         </Link>
                                     </div>
-                                    <p>Already Have Account? <Link href="/login">Login</Link></p>
+                                    <p>Already Have An Account? <Link href="/login">Login</Link></p>
                                 </div>
                             </form>
                         </div>

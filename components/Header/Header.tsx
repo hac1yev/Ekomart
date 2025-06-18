@@ -6,18 +6,42 @@ import MobileHeader from "./MobileHeader";
 import { Bell, Heart, ShoppingCart, UserIcon } from "lucide-react";
 import Link from "next/link";
 import Search from "./Search";
+import { useTypedFavoriteSelector } from "@/store/favorites-slice";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { FavoriteProductsAction } from "@/store/favorites-slice";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { LoadingProductsAction } from "@/store/loading-slice";
 
 const Header = () => {
   const [token,setToken] = useState("");
+  const favoriteProducts = useTypedFavoriteSelector(state => state.favoriteReducer.favoriteProducts);
+  const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const accessToken: string = typeof window !== "undefined" && localStorage.getItem("userInfo") 
       ? JSON.parse(localStorage.getItem("userInfo") || "{}").accessToken 
       : "";        
     setToken(accessToken);
-  }, [])
+  }, []);
   
+  useEffect(() => {
+    if(token) {
+      (async function () {
+        dispatch(LoadingProductsAction.toggleLoading(true));
+        try {
+          const response = await axiosPrivate.get("/api/products/favorites");
+          dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
+        } catch (error) {
+          console.log(error);
+        } finally {
+          dispatch(LoadingProductsAction.toggleLoading(false));
+        }
+      })();
+    }
+  }, [axiosPrivate, dispatch, token]);
+
   return (
     <>
       <div className="search-header-area-main">
@@ -38,17 +62,34 @@ const Header = () => {
                 <div className="category-search-wrapper">
                   <Search />
                 </div>
-                <div className="accont-wishlist-cart-area-header">
-                  <Link href={token ? "/profile" : "/login"} className="btn-border-only account">
-                    <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
-                      <UserIcon width={18} />
+                  <div className="accont-wishlist-cart-area-header">
+                   <div 
+                    className={"btn-border-only cart category-hover-header"} 
+                  >
+                    <div 
+                      className="d-flex align-items-center h-100 gap-3 cart-button-wrap"
+                    >
+                      <div style={{ position: 'relative' }}>
+                        <ShoppingCart 
+                          style={{ flexShrink: 0 }} 
+                          width={18} 
+                        />
+                        <span className="number" style={{ position: 'absolute', left: '7px', top: '-6px' }}>2</span>
+                      </div>
                     </div>
-                  </Link>
+                  </div>
                   <Link href="/profile/favorites" className="btn-border-only wishlist">
                     <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                       <div style={{ position: 'relative' }}>
                         <Heart width={18} />
-                        <span className="number" style={{ position: 'absolute', left: '7px', top: '-6px' }}>2</span>
+                        {favoriteProducts.length > 0 && (
+                          <span 
+                            className="number" 
+                            style={{ position: 'absolute', left: '7px', top: '-6px' }}
+                          >
+                            {favoriteProducts.length}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -67,21 +108,11 @@ const Header = () => {
                       </div>
                     </div>
                   </div>
-                  <div 
-                    className={"btn-border-only cart category-hover-header"} 
-                  >
-                    <div 
-                      className="d-flex align-items-center h-100 gap-3 cart-button-wrap"
-                    >
-                      <div style={{ position: 'relative' }}>
-                        <ShoppingCart 
-                          style={{ flexShrink: 0 }} 
-                          width={18} 
-                        />
-                        <span className="number" style={{ position: 'absolute', left: '7px', top: '-6px' }}>2</span>
-                      </div>
+                  <Link href={token ? "/profile" : "/login"} className="btn-border-only account">
+                    <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
+                      <UserIcon width={18} />
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

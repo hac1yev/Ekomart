@@ -17327,11 +17327,23 @@ li.with-megamenu:hover .rts-megamenu {
 }
 
 .bg_one-banner {
-  background-image: url(../public/images/banner/01.webp);
+  position: relative;
+  background-image: url(../public/images/banner/hero-img.jpg);
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.bg_one-banner {
-  background-image: url(../public/images/banner/01.webp);
+.bg_one-banner::before {
+  content: '';
+  position: absolute;
+  background: rgba(0,0,0,0.6);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
 }
 
 .bg_one-banner.two {
@@ -17344,7 +17356,9 @@ li.with-megamenu:hover .rts-megamenu {
 }
 
 .banner-one-inner-content {
+  position: absolute;
   text-align: center;
+  z-index: 20;
 }
 
 .banner-one-inner-content .rts-btn {

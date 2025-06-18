@@ -2,12 +2,24 @@
 
 import ProductDetailContainer from "@/components/ProductDetail/ProductDetailContainer";
 import { useTypedProductDetailSelector } from "@/store/product-detail-slice";
+import axios from "axios";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const ProductDetail = ({ params }: { params: { id: string } }) => {
   const productContent = useTypedProductDetailSelector(state => state.productDetailReducer.productContent);
   const { id } = params;
+
+  useEffect(() => {
+    (async function() {
+      try {
+        await axios.put(`/api/products/${id}/views`);
+      } catch (error) {
+        console.log(error);
+      }
+    })()
+  }, [id]);
 
   return (
     <>

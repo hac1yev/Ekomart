@@ -1,17 +1,11 @@
 import { ChevronDown, ChevronUp, ShoppingCartIcon, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { FavoriteProductsAction } from "@/store/favorites-slice";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { LoadingProductsAction } from "@/store/loading-slice";
+import { useState } from 'react';
 import useFavorite from "@/hooks/useFavorite";
 
 const FavoritesList = ({ favorites }: { favorites: ProductType[] }) => {
   const [count, setCount] = useState<Record<string, number>>({});
-  const axiosPrivate = useAxiosPrivate();
-  const dispatch = useDispatch();
   const { handleRemoveFavorite } = useFavorite('profile-favorites');
 
   const handleIncreaseCount = (id: string) => {
@@ -33,20 +27,6 @@ const FavoritesList = ({ favorites }: { favorites: ProductType[] }) => {
         };
       });
   };
-
-  useEffect(() => {
-    (async function () {
-      dispatch(LoadingProductsAction.toggleLoading(true));
-      try {
-        const response = await axiosPrivate.get("/api/products/favorites");
-        dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
-      } catch (error) {
-        console.log(error);
-      } finally {
-        dispatch(LoadingProductsAction.toggleLoading(false));
-      }
-    })();
-  }, [axiosPrivate, dispatch]);
 
   return (
     <>

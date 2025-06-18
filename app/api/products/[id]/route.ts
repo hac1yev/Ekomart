@@ -4,13 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const url = req.url;
-    const id = url.split("/").at(-1);
-    let query;
-
+    const id = url.split("/").at(-1) || "";
+    
     const refreshToken =  req.cookies.get("refreshToken")?.value || "";
     const isValidRefreshToken = await verifyRefreshToken(refreshToken);
 
     const pool = await connectToDB();
+
+    let query;
 
     if(!isValidRefreshToken) {
         query = `

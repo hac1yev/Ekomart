@@ -20,7 +20,6 @@ const ProductDetailContainer = ({ id }: { id: string }) => {
   const productContent = useTypedProductDetailSelector(state => state.productDetailReducer.productContent);
   const productDetailAdditionalInfo = useTypedProductDetailSelector(state => state.productDetailReducer.additionalInfo);
   const productDetailRatingResult = useTypedProductDetailSelector(state => state.productDetailReducer.ratingResult);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

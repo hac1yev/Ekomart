@@ -17,8 +17,8 @@ const Banner = () => {
                         Get up to 30% off on your first $150 purchase
                       </span>
                       <h1 className="title">
-                        Do not miss our amazing <br />
-                        grocery deals
+                        Your Favorite Products <br />
+                        Delivered Fast
                       </h1>
                       <Link
                         href="/products"

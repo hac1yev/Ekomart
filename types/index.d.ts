@@ -109,3 +109,12 @@ declare type RatingType = {
   star: null | number;
   reviewMessage: string;
 }
+
+declare type CartItem = {
+  productId: number;
+  image: string;
+  title: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+}

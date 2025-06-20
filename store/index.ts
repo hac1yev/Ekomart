@@ -6,6 +6,7 @@ import productDetailSlice from "./product-detail-slice";
 import homePageSlice from "./home-slice";
 import favoriteSlice from "./favorites-slice";
 import loadingSlice from "./loading-slice";
+import cartSlice from "./cart-slice";
 
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         productDetailReducer: productDetailSlice.reducer,
         homePageReducer: homePageSlice.reducer,
         favoriteReducer: favoriteSlice.reducer,
-        loadingReducer: loadingSlice.reducer
+        loadingReducer: loadingSlice.reducer,
+        cartReducer: cartSlice.reducer
     }
 });

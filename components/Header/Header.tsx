@@ -12,27 +12,31 @@ import { FavoriteProductsAction } from "@/store/favorites-slice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoadingProductsAction } from "@/store/loading-slice";
+import { cartSliceAction } from "@/store/cart-slice";
 
 const Header = () => {
-  const [token,setToken] = useState("");
-  const favoriteProducts = useTypedFavoriteSelector(state => state.favoriteReducer.favoriteProducts);
+  const [token, setToken] = useState("");
+  const favoriteProducts = useTypedFavoriteSelector((state) => state.favoriteReducer.favoriteProducts);
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const accessToken: string = typeof window !== "undefined" && localStorage.getItem("userInfo") 
-      ? JSON.parse(localStorage.getItem("userInfo") || "{}").accessToken 
-      : "";        
+    const accessToken: string =
+      typeof window !== "undefined" && localStorage.getItem("userInfo")
+        ? JSON.parse(localStorage.getItem("userInfo") || "{}").accessToken
+        : "";
     setToken(accessToken);
   }, []);
-  
+
   useEffect(() => {
-    if(token) {
+    if (token) {
       (async function () {
         dispatch(LoadingProductsAction.toggleLoading(true));
         try {
           const response = await axiosPrivate.get("/api/products/favorites");
-          dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
+          dispatch(
+            FavoriteProductsAction.getFavoriteProducts(response.data.favorites)
+          );
         } catch (error) {
           console.log(error);
         } finally {
@@ -41,6 +45,23 @@ const Header = () => {
       })();
     }
   }, [axiosPrivate, dispatch, token]);
+
+  useEffect(() => {
+    if(token) {
+      (async function() {
+        dispatch(LoadingProductsAction.toggleLoading(true));
+        try {
+          const response = await axiosPrivate.get("/api/cart");
+          console.log(response);
+          dispatch(cartSliceAction.getAllCarts(response.data.cartProducts));
+        } catch (error) {
+          console.log(error);
+        }finally{
+          dispatch(LoadingProductsAction.toggleLoading(false));
+        }
+      })()
+    }
+  }, [token,axiosPrivate,dispatch]);
 
   return (
     <>
@@ -62,30 +83,39 @@ const Header = () => {
                 <div className="category-search-wrapper">
                   <Search />
                 </div>
-                  <div className="accont-wishlist-cart-area-header">
-                   <div 
-                    className={"btn-border-only cart category-hover-header"} 
-                  >
-                    <div 
-                      className="d-flex align-items-center h-100 gap-3 cart-button-wrap"
-                    >
-                      <div style={{ position: 'relative' }}>
-                        <ShoppingCart 
-                          style={{ flexShrink: 0 }} 
-                          width={18} 
-                        />
-                        <span className="number" style={{ position: 'absolute', left: '7px', top: '-6px' }}>2</span>
+                <div className="accont-wishlist-cart-area-header">
+                  <Link href={'/cart'} className={"btn-border-only cart category-hover-header"}>
+                    <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
+                      <div style={{ position: "relative" }}>
+                        <ShoppingCart style={{ flexShrink: 0 }} width={18} />
+                        <span
+                          className="number"
+                          style={{
+                            position: "absolute",
+                            left: "7px",
+                            top: "-6px",
+                          }}
+                        >
+                          2
+                        </span>
                       </div>
                     </div>
-                  </div>
-                  <Link href="/profile/favorites" className="btn-border-only wishlist">
+                  </Link>
+                  <Link
+                    href="/profile/favorites"
+                    className="btn-border-only wishlist"
+                  >
                     <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
-                      <div style={{ position: 'relative' }}>
+                      <div style={{ position: "relative" }}>
                         <Heart width={18} />
                         {favoriteProducts.length > 0 && (
-                          <span 
-                            className="number" 
-                            style={{ position: 'absolute', left: '7px', top: '-6px' }}
+                          <span
+                            className="number"
+                            style={{
+                              position: "absolute",
+                              left: "7px",
+                              top: "-6px",
+                            }}
                           >
                             {favoriteProducts.length}
                           </span>
@@ -93,22 +123,27 @@ const Header = () => {
                       </div>
                     </div>
                   </Link>
-                  <div 
-                    className={"btn-border-only cart category-hover-header"} 
-                  >
-                    <div 
-                      className="d-flex align-items-center h-100 gap-3 cart-button-wrap"
-                    >
-                      <div style={{ position: 'relative' }}>
-                        <Bell 
-                          style={{ flexShrink: 0 }} 
-                          width={18} 
-                        />
-                        <span className="number" style={{ position: 'absolute', left: '7px', top: '-6px' }}>2</span>
+                  <div className={"btn-border-only cart category-hover-header"}>
+                    <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
+                      <div style={{ position: "relative" }}>
+                        <Bell style={{ flexShrink: 0 }} width={18} />
+                        <span
+                          className="number"
+                          style={{
+                            position: "absolute",
+                            left: "7px",
+                            top: "-6px",
+                          }}
+                        >
+                          2
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <Link href={token ? "/profile" : "/login"} className="btn-border-only account">
+                  <Link
+                    href={token ? "/profile" : "/login"}
+                    className="btn-border-only account"
+                  >
                     <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                       <UserIcon width={18} />
                     </div>

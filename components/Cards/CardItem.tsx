@@ -7,6 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import useFavorite from "@/hooks/useFavorite";
+import useShoppingCart from "@/hooks/useShoppingCart";
 
 const CardItem = (
   props: Pick<ProductCardType, keyof ProductCardType> & {
@@ -16,6 +17,7 @@ const CardItem = (
 ) => {
   const [count, setCount] = useState(1);
   const { handleAddFavorite, handleRemoveFavorite } = useFavorite(props.componentType as string);
+  const { handleAddToCart } = useShoppingCart();
 
   const handleIncreaseCount = () => {
     setCount((prev) => prev + 1);
@@ -108,7 +110,13 @@ const CardItem = (
               </button>
             </div>
           </div>
-          <button className="rts-btn btn-primary radious-sm with-icon">
+          <button className="rts-btn btn-primary radious-sm with-icon" onClick={handleAddToCart.bind(null, {
+            productId: props.id,
+            image: props.image,
+            title: props.title,
+            price: props.price,
+            quantity: 1
+          })}>
             <div className="btn-text d-flex align-items-center gap-2">
               <span>Add</span>
               <ShoppingCart width={17} />

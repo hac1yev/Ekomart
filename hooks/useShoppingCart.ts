@@ -10,13 +10,7 @@ const useShoppingCart = () => {
         ? JSON.parse(localStorage.getItem("userInfo") || "{}").userId
         : "";
 
-    const handleAddToCart = async ({ productId,image,title,price,quantity }: { 
-        productId: number, 
-        image: string, 
-        title: string, 
-        price: number, 
-        quantity: number 
-    }) => {
+    const handleAddToCart = async ({ productId,image,title,price,quantity }: Pick<CartItem, keyof Omit<CartItem, 'totalPrice'>>) => {
         try {
             await axiosPrivate.post("/api/cart", JSON.stringify({ productId, userId, totalPrice: price * quantity }), {
                 headers: {
@@ -31,8 +25,7 @@ const useShoppingCart = () => {
 
     const handleRemoveFromCart = async (productId: number) => {
         try {
-            const response = await axiosPrivate.delete(`/api/cart/${productId}`);
-            console.log(response);
+            await axiosPrivate.delete(`/api/cart/${productId}`);
         } catch (error) {
             console.log(error);
         }

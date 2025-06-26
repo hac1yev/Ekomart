@@ -16,9 +16,12 @@ import { cartSliceAction } from "@/store/cart-slice";
 
 const Header = () => {
   const [token, setToken] = useState("");
-  const favoriteProducts = useTypedFavoriteSelector((state) => state.favoriteReducer.favoriteProducts);
+  const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
+
+  console.log(favoritesCount);
+  
 
   useEffect(() => {
     const accessToken: string =
@@ -34,9 +37,8 @@ const Header = () => {
         dispatch(LoadingProductsAction.toggleLoading(true));
         try {
           const response = await axiosPrivate.get("/api/products/favorites");
-          dispatch(
-            FavoriteProductsAction.getFavoriteProducts(response.data.favorites)
-          );
+          dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
+          dispatch(FavoriteProductsAction.getFavoriteCounts(response.data.favorites.length));
         } catch (error) {
           console.log(error);
         } finally {
@@ -108,7 +110,7 @@ const Header = () => {
                     <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                       <div style={{ position: "relative" }}>
                         <Heart width={18} />
-                        {favoriteProducts.length > 0 && (
+                        {favoritesCount > 0 && (
                           <span
                             className="number"
                             style={{
@@ -117,7 +119,7 @@ const Header = () => {
                               top: "-6px",
                             }}
                           >
-                            {favoriteProducts.length}
+                            {favoritesCount}
                           </span>
                         )}
                       </div>

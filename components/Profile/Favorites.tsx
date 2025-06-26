@@ -2,8 +2,11 @@
 
 import dynamic from "next/dynamic";
 import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent";
-import { useTypedFavoriteSelector } from "@/store/favorites-slice";
-import { useTypedLoadingSelector } from "@/store/loading-slice";
+import { FavoriteProductsAction, useTypedFavoriteSelector } from "@/store/favorites-slice";
+import { LoadingProductsAction, useTypedLoadingSelector } from "@/store/loading-slice";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const AllFavoriteProducts = dynamic(() => import("./FavoritesList"), {
   loading: () => <LinearProgressComponent />,
@@ -13,6 +16,22 @@ const AllFavoriteProducts = dynamic(() => import("./FavoritesList"), {
 const Favorites = () => {
   const favorites = useTypedFavoriteSelector((state) => state.favoriteReducer.favoriteProducts);
   const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
+  const axiosPrivate =  useAxiosPrivate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async function () {
+      dispatch(LoadingProductsAction.toggleLoading(true));
+      try {
+        const response = await axiosPrivate.get("/api/products/favorites");
+        dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        dispatch(LoadingProductsAction.toggleLoading(false));
+      }
+    })();
+  }, [axiosPrivate, dispatch]);
 
   return (
     <div className="container">

@@ -17,14 +17,31 @@ export async function POST(req: NextRequest) {
 
         const pool = await connectToDB();
         
-        await pool.request()
-            .input("productId", sql.Int, productId)
-            .input("userId", sql.Int, userId)
-            .input("quantity", sql.Int, 1)
-            .input("totalPrice", sql.Int, totalPrice)
-            .query(`
-                insert into Cart values(@productId,@userId,@quantity,@totalPrice)
-            `);
+        const hasProduct = await pool.request().query(`
+            select id from Cart where userId = ${userId} and productId = ${productId}
+        `);
+
+        if(hasProduct.recordset.length === 0) {
+            await pool.request()
+                .input("productId", sql.Int, productId)
+                .input("userId", sql.Int, userId)
+                .input("quantity", sql.Int, 1)
+                .input("totalPrice", sql.Int, totalPrice)
+                .query(`
+                    insert into Cart values(@productId,@userId,@quantity,@totalPrice)
+                `);
+        }else {
+            await pool.request()
+                .input("productId", sql.Int, productId)
+                .input("userId", sql.Int, userId)
+                .input("totalPrice", sql.Int, totalPrice)
+                .query(`
+                    UPDATE Cart
+                    SET quantity = quantity + 1,
+                        totalPrice = totalPrice + @totalPrice
+                    WHERE productId = @productId AND userId = @userId
+                `);
+        }
     
         return NextResponse.json({ message: 'Success' }, { status: 200 });
     } catch (error) {
@@ -46,9 +63,15 @@ export async function GET(req: NextRequest) {
         const pool = await connectToDB();
 
         const result = await pool.request().query(`
-            select c.productId, p.image, p.title, p.price, c.quantity, 
-            c.totalPrice from Cart c inner join Products p
-            on c.productId = p.id
+            SELECT 
+                c.productId, 
+                p.image, 
+                p.title, 
+                p.price, 
+                quantity,
+                totalPrice
+            FROM Cart c
+            INNER JOIN Products p ON c.productId = p.id
         `);
 
         const cartProducts = result.recordset;

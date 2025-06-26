@@ -1,14 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic"
+import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent"
 import { useTypedCartSelector } from "@/store/cart-slice";
-import dynamic from "next/dynamic";
-import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent";
 import { useTypedLoadingSelector } from "@/store/loading-slice";
 
-const DynamicCartItem = dynamic(() => import('./CartItem'), {
+const DynamicCartList = dynamic(() => import('./CartList'), {
     loading: () => <LinearProgressComponent />,
     ssr: false
-});
+})
 
 const ShoppingCartWrapper = () => {
     const carts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
@@ -51,13 +51,7 @@ const ShoppingCartWrapper = () => {
                                     <h4 className="mb--0">There is no product on your cart!</h4>
                                 </div>
                             )}
-                            {carts.map((cart) => (
-                                <DynamicCartItem
-                                    key={cart.productId} 
-                                    cart={cart}
-                                />
-                            ))}
-                            
+                            <DynamicCartList />
                         </div>
                     </div>
                     <div className="col-xl-3 col-lg-12 col-md-12 col-12 order-1 order-xl-2 order-lg-1 order-md-1 order-sm-1">
@@ -77,7 +71,7 @@ const ShoppingCartWrapper = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ShoppingCartWrapper;
+export default ShoppingCartWrapper

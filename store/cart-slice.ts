@@ -16,13 +16,14 @@ const cartSlice = createSlice({
         getAllCarts(state,action) {
             state.cartProducts = action.payload;
         },
-        addProduct(state,action) {
-            const productIndex = state.cartProducts.findIndex((item) => item.productId === action.payload.id);
+        addProduct(state, action) {
+            const productIndex = state.cartProducts.findIndex((item) => item.productId === action.payload.productId);
 
-            if(productIndex !== -1) {
-                state.cartProducts[productIndex] = {
-                    ...action.payload
-                }
+            if (productIndex !== -1) {
+                state.cartProducts[productIndex].quantity += action.payload.quantity;
+                state.cartProducts[productIndex].totalPrice += (action.payload.price * action.payload.quantity);
+            } else {
+                state.cartProducts.push(action.payload);
             }
         }
     }

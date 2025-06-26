@@ -35,6 +35,7 @@ const useFavorite = (componentType: string) => {
                     dispatch(ProductSliceActions.addFavProducts(productId));
                     break;
             }
+            dispatch(FavoriteProductsAction.increaseFavCount());
         } catch (error) {
             console.log(error);
         }
@@ -61,6 +62,7 @@ const useFavorite = (componentType: string) => {
                     dispatch(ProductSliceActions.deleteFavProducts(productId));
                     break;
             }
+            dispatch(FavoriteProductsAction.decreaseFavCount());
         } catch (error) {
             console.log(error);
         }

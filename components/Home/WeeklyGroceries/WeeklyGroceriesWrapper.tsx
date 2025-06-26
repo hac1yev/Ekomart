@@ -3,7 +3,7 @@ import { useTypedHomeSelector } from '@/store/home-slice';
 
 const WeeklyGroceriesWrapper = ({ tabIndex }: { tabIndex: number }) => {
     const weeklyProducts = useTypedHomeSelector((state) => state.homePageReducer.homePageData).weeklyProducts;
-
+    
     return (
         <div className="row">
                     <div className="col-lg-12">

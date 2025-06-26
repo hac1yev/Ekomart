@@ -1,12 +1,16 @@
+import useShoppingCart from "@/hooks/useShoppingCart";
+import { MinusIcon, PlusIcon, X } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
 const CartItem = ({ cart }: { cart: CartItem }) => {
+  const { handleAddToCart } = useShoppingCart();
+
   return (
     <div className="single-cart-area-list main  item-parent">
       <div className="product-main-cart">
         <div className="close section-activation">
-          <i className="fa-regular fa-x"></i>
+          <X width={35} />
         </div>
         <div className="thumbnail">
           <Image 
@@ -26,15 +30,28 @@ const CartItem = ({ cart }: { cart: CartItem }) => {
       <div className="price">
         <p>${cart.price.toFixed(2)}</p>
       </div>
-      <div className="quantity">
+      <div className="quantity" >
         <div className="quantity-edit">
-          <input type="text" className="input" value={1} />
-          <div className="button-wrapper-action">
-            <button className="button">
-              <i className="fa-regular fa-chevron-down"></i>
+          <div className="button-wrapper-action d-flex justify-content-between align-items-center w-100" style={{ border: 'none' }}>
+            <button 
+              style={{ cursor: 'pointer', border: 'none' }}
+              className="button" 
+            >
+                <MinusIcon className="minus-icon" width={16}/>
             </button>
-            <button className="button plus">
-              +<i className="fa-regular fa-chevron-up"></i>
+            <span>{cart.quantity}</span>
+            <button 
+              style={{ cursor: 'pointer', border: 'none' }}
+              className="button plus"
+              onClick={handleAddToCart.bind(null, {
+                productId: cart.productId,
+                image: cart.image,
+                title: cart.title,
+                price: cart.price,
+                quantity: 1
+              })}
+            >
+                <PlusIcon className="plus-icon" width={16}/>
             </button>
           </div>
         </div>

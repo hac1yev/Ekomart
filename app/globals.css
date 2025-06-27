@@ -18442,6 +18442,7 @@ li.with-megamenu:hover .rts-megamenu {
   border-radius: 6px;
   border: 1px solid #E2E2E2;
   height: 45px;
+  width: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18458,6 +18459,11 @@ li.with-megamenu:hover .rts-megamenu {
     height: 45px;
     padding: 0;
     width: 45px;
+  }
+
+  .accont-wishlist-cart-area-header,
+  .main-wrapper-action-2 {
+    gap: 5px;
   }
 
   .accont-wishlist-cart-area-header .cart span.number {
@@ -18487,7 +18493,11 @@ li.with-megamenu:hover .rts-megamenu {
 } */
 
 .cart-button-wrap {
-  padding: 0 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
   border-radius: 6px;
   cursor: pointer;
 }

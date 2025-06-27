@@ -7,63 +7,11 @@ import { Bell, Heart, ShoppingCart, UserIcon } from "lucide-react";
 import Link from "next/link";
 import Search from "./Search";
 import { useTypedFavoriteSelector } from "@/store/favorites-slice";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { FavoriteProductsAction } from "@/store/favorites-slice";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { LoadingProductsAction } from "@/store/loading-slice";
-import { cartSliceAction } from "@/store/cart-slice";
+import { useHeaderData } from "@/hooks/useHeaderData";
 
 const Header = () => {
-  const [token, setToken] = useState("");
   const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
-  const axiosPrivate = useAxiosPrivate();
-  const dispatch = useDispatch();
-
-  console.log(favoritesCount);
-  
-
-  useEffect(() => {
-    const accessToken: string =
-      typeof window !== "undefined" && localStorage.getItem("userInfo")
-        ? JSON.parse(localStorage.getItem("userInfo") || "{}").accessToken
-        : "";
-    setToken(accessToken);
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      (async function () {
-        dispatch(LoadingProductsAction.toggleLoading(true));
-        try {
-          const response = await axiosPrivate.get("/api/products/favorites");
-          dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
-          dispatch(FavoriteProductsAction.getFavoriteCounts(response.data.favorites.length));
-        } catch (error) {
-          console.log(error);
-        } finally {
-          dispatch(LoadingProductsAction.toggleLoading(false));
-        }
-      })();
-    }
-  }, [axiosPrivate, dispatch, token]);
-
-  useEffect(() => {
-    if(token) {
-      (async function() {
-        dispatch(LoadingProductsAction.toggleLoading(true));
-        try {
-          const response = await axiosPrivate.get("/api/cart");
-          console.log(response);
-          dispatch(cartSliceAction.getAllCarts(response.data.cartProducts));
-        } catch (error) {
-          console.log(error);
-        }finally{
-          dispatch(LoadingProductsAction.toggleLoading(false));
-        }
-      })()
-    }
-  }, [token,axiosPrivate,dispatch]);
+  const { token } = useHeaderData();
 
   return (
     <>

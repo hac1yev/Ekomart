@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent"
 import { useTypedCartSelector } from "@/store/cart-slice";
 import { useTypedLoadingSelector } from "@/store/loading-slice";
+import { useMemo } from "react";
 
 const DynamicCartList = dynamic(() => import('./CartList'), {
     loading: () => <LinearProgressComponent />,
@@ -13,13 +14,7 @@ const DynamicCartList = dynamic(() => import('./CartList'), {
 const ShoppingCartWrapper = () => {
     const carts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
     const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
-
-    const subTotal = carts.reduce((total, acc) => {
-        const { totalPrice } = acc;
-        total += totalPrice;
-
-        return total;
-    }, 0); 
+    const subTotal = useMemo(() => carts.reduce((total, acc) => total + acc.totalPrice, 0), [carts]);
 
     return (
         <div className="rts-cart-area rts-section-gap bg_light-1">

@@ -14,6 +14,13 @@ const ShoppingCartWrapper = () => {
     const carts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
     const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
 
+    const subTotal = carts.reduce((total, acc) => {
+        const { totalPrice } = acc;
+        total += totalPrice;
+
+        return total;
+    }, 0); 
+
     return (
         <div className="rts-cart-area rts-section-gap bg_light-1">
             <div className="container">
@@ -60,7 +67,7 @@ const ShoppingCartWrapper = () => {
                             <div className="bottom">
                                 <div className="wrapper">
                                     <span>Subtotal</span>
-                                    <h6 className="price">$1100.00</h6>
+                                    <h6 className="price">${subTotal.toFixed(2)}</h6>
                                 </div>
                                 <div className="button-area">
                                     <button className="rts-btn btn-primary">Proceed To Checkout</button>

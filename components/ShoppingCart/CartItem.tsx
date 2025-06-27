@@ -35,7 +35,7 @@ const CartItem = ({ cart }: { cart: CartItem }) => {
             <button 
               style={{ cursor: 'pointer', border: 'none' }}
                 onClick={() => {
-                  if (cart.quantity !== 1) {
+                  if (cart.quantity > 1) {
                     handleDecreaseQuantity({
                       productId: cart.productId,
                       price: cart.price,

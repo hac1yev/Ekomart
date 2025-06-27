@@ -6,10 +6,12 @@ import moment from "moment";
 import { getAverageRating, getReviewCount } from "@/app/lib/getRating";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import useFavorite from "@/hooks/useFavorite";
+import useShoppingCart from "@/hooks/useShoppingCart";
 
 const ProductDetailContent = ({ productContent }: { productContent: ProductDetailContentType }) => {
   const [count,setCount] = useState(1);
   const { handleAddFavorite, handleRemoveFavorite } = useFavorite('detailContent');
+  const { handleAddToCart } = useShoppingCart();
 
   const filteredRating = useMemo(() => {
     return productContent.ratingResult.filter((item) => item.count !== 0);
@@ -84,15 +86,21 @@ const ProductDetailContent = ({ productContent }: { productContent: ProductDetai
                     </button>
                   </div>
                 </div>
-                <a
-                  href="#"
+                <button
                   className="rts-btn btn-primary radious-sm with-icon"
+                  onClick={handleAddToCart.bind(null, {
+                    productId: productContent.id,
+                    image: productContent.image,
+                    title: productContent.title,
+                    price: productContent.price,
+                    quantity: count
+                  })}
                 >
-                  <div className="btn-text">Add To Cart</div>
-                  <div className="arrow-icon">
+                  <span className="btn-text">Add To Cart</span>
+                  <span className="arrow-icon">
                     <ShoppingCart width={20} />
-                  </div>
-                </a>
+                  </span>
+                </button>
               </div>
               <div className="product-uniques">
                 <span className="sku product-unipue mb--10">

@@ -30,7 +30,7 @@ export default function Layout({
             <div className="col-lg-3">
               <SidebarLinks />
             </div>
-            <div className="col-lg-9 pt_md--30 pt_sm--30">{children}</div>
+            <div className="col-lg-9 pt_md--30 pt_sm--30 pl_sm--15 pr_sm--15">{children}</div>
           </div>
         </div>
       </div>

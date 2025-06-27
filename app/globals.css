@@ -18514,7 +18514,8 @@ li.with-megamenu:hover .rts-megamenu {
 
 @media only screen and (max-width: 767px) {
   .btn-border-only.wishlist,
-  .actions-area .search-btn {
+  .actions-area .search-btn,
+  .single-cart-area-list.head {
     display: none!important;
   }
 }
@@ -23586,6 +23587,10 @@ div.error-bg > p {
   padding: 0;
   max-width: max-content;
   font-size: 0;
+}
+
+.single-cart-area-list.main .quantity-edit button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .single-cart-area-list.main .quantity-edit button i {

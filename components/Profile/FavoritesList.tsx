@@ -1,12 +1,13 @@
 import { ChevronDown, ChevronUp, ShoppingCartIcon, X } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from 'react';
 import useFavorite from "@/hooks/useFavorite";
+import useShoppingCart from "@/hooks/useShoppingCart";
 
 const FavoritesList = ({ favorites }: { favorites: ProductType[] }) => {
   const [count, setCount] = useState<Record<string, number>>({});
   const { handleRemoveFavorite } = useFavorite('profile-favorites');
+  const { handleAddToCart } = useShoppingCart();
 
   const handleIncreaseCount = (id: string) => {
     setCount((prev) => {
@@ -78,11 +79,17 @@ const FavoritesList = ({ favorites }: { favorites: ProductType[] }) => {
           <div className="subtotal">
             <p>${(item.price * (count[`SKU${item.id}`] || 1)).toFixed(2)}</p>
           </div>
-          <div className="button-area">
-            <Link href="/" className="rts-btn btn-primary radious-sm with-icon">
-              <div className="btn-text">Add To Cart</div>
+          <div className="button-area" onClick={handleAddToCart.bind(null, {
+            productId: item.id,
+            image: item.image,
+            title: item.title,
+            price: item.price,
+            quantity: count[`SKU${item.id}`] || 1
+          })}>
+            <button className="rts-btn btn-primary radious-sm with-icon">
+              <div className="btn-text" style={{ whiteSpace: 'nowrap' }}>Add To Cart</div>
               <ShoppingCartIcon width={18} />
-            </Link>
+            </button>
           </div>
         </div>
       ))}

@@ -3,10 +3,24 @@
 import { ChevronDown, ChevronUp, ShoppingCart } from "lucide-react";
 import bookmark from "../../../public/images/bookmark.png";
 import Image from "next/image";
+import useShoppingCart from "@/hooks/useShoppingCart";
+import { useState } from "react";
 
-type DiscountProductsType = "discount" | "image" | "brand" | "title" | "price" | "value";
+type DiscountProductsType = "id" | "discount" | "image" | "brand" | "title" | "price" | "value";
 
-const DiscountCardItem = ({ discount, image, title, price, value, brand }: Pick<ProductType, DiscountProductsType>) => {
+const DiscountCardItem = ({ id, discount, image, title, price, value, brand }: Pick<ProductType, DiscountProductsType>) => {
+  const { handleAddToCart } = useShoppingCart();
+  const [count,setCount] = useState(1);
+
+  const handleIncreaseCount = () => {
+    setCount((prev) => prev + 1);
+  };
+
+  const handleDecreaseCount = () => {
+    if (count === 1) return;
+    else setCount((prev) => prev - 1);
+  };    
+
   return (
     <div className="single-shopping-card-one discount-offer">
       <a href="shop-details.html" className="thumbnail-preview">
@@ -35,17 +49,23 @@ const DiscountCardItem = ({ discount, image, title, price, value, brand }: Pick<
         </div>
         <div className="cart-counter-action">
           <div className="quantity-edit">
-            <input type="text" className="input" onChange={() => console.log("")} value={1} />
+            <span style={{ fontSize: '16px' }}>{count}</span>
             <div className="button-wrapper-action">
-              <button className="button">
+              <button className="button" onClick={handleDecreaseCount}>
                 <ChevronDown width={16} />
               </button>
-              <button className="button plus">
+              <button className="button plus" onClick={handleIncreaseCount}>
                 <ChevronUp width={16} />
               </button>
             </div>
           </div>
-          <button className="rts-btn btn-primary radious-sm with-icon">
+          <button className="rts-btn btn-primary radious-sm with-icon" onClick={handleAddToCart.bind(null, {
+            productId: id,
+            image: image,
+            title: title,
+            price: price,
+            quantity: count
+          })}>
             <span className="btn-text">Add</span>
             <ShoppingCart width={17} />
           </button>

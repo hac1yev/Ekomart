@@ -5,7 +5,7 @@ import { verifyJWTToken } from "@/app/lib/verifyToken";
 
 export async function POST(req: NextRequest) {
     try {
-        const { productId,userId,totalPrice } = await req.json();
+        const { productId,userId,totalPrice,quantity } = await req.json();
         const bearer = req.headers.get('Authorization');
         const accessToken = bearer?.split(" ")[1] || "";
 
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
             await pool.request()
                 .input("productId", sql.Int, productId)
                 .input("userId", sql.Int, userId)
-                .input("quantity", sql.Int, 1)
+                .input("quantity", sql.Int, quantity)
                 .input("totalPrice", sql.Int, totalPrice)
                 .query(`
                     insert into Cart values(@productId,@userId,@quantity,@totalPrice)
@@ -34,10 +34,11 @@ export async function POST(req: NextRequest) {
             await pool.request()
                 .input("productId", sql.Int, productId)
                 .input("userId", sql.Int, userId)
+                .input("quantity", sql.Int, quantity)
                 .input("totalPrice", sql.Int, totalPrice)
                 .query(`
                     UPDATE Cart
-                    SET quantity = quantity + 1,
+                    SET quantity = quantity + @quantity,
                         totalPrice = totalPrice + @totalPrice
                     WHERE productId = @productId AND userId = @userId
                 `);
@@ -80,5 +81,49 @@ export async function GET(req: NextRequest) {
 
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    }
+}
+
+export async function PUT(req: NextRequest) {
+    try {
+        const { productId,userId,price,count_type } = await req.json();
+        const bearer = req.headers.get("Authorization");
+        const accessToken =  bearer?.split(" ")[1] || "";
+
+        const isValidJwtToken = await verifyJWTToken(accessToken);
+
+        if(!isValidJwtToken) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+        
+        const pool = await connectToDB();
+
+        if(count_type === 'increase') {
+            await pool.request()
+                .input("productId", sql.Int, productId)
+                .input("userId", sql.Int, userId)
+                .input("totalPrice", sql.Int, price)
+                .query(`
+                    UPDATE Cart
+                    SET quantity = quantity + 1,
+                        totalPrice = totalPrice + @totalPrice
+                    WHERE productId = @productId AND userId = @userId
+                `);
+        }else{
+            await pool.request()
+                .input("productId", sql.Int, productId)
+                .input("userId", sql.Int, userId)
+                .input("totalPrice", sql.Int, price)
+                .query(`
+                    UPDATE Cart
+                    SET quantity = quantity - 1,
+                        totalPrice = totalPrice - @totalPrice
+                    WHERE productId = @productId AND userId = @userId
+                `);
+        }
+
+        return NextResponse.json({ message: 'Success' });
+    } catch (error) {
+        return NextResponse.json({ error }, { status: 500 });
     }
 }

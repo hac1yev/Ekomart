@@ -1,15 +1,14 @@
 import useShoppingCart from "@/hooks/useShoppingCart";
 import { MinusIcon, PlusIcon, X } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 
 const CartItem = ({ cart }: { cart: CartItem }) => {
-  const { handleAddToCart } = useShoppingCart();
+  const { handleDecreaseQuantity,handleIncreaseQuantity,handleRemoveFromCart } = useShoppingCart();
 
   return (
     <div className="single-cart-area-list main  item-parent">
       <div className="product-main-cart">
-        <div className="close section-activation">
+        <div className="close section-activation" onClick={handleRemoveFromCart.bind(null,cart.productId)}>
           <X width={35} />
         </div>
         <div className="thumbnail">
@@ -35,6 +34,14 @@ const CartItem = ({ cart }: { cart: CartItem }) => {
           <div className="button-wrapper-action d-flex justify-content-between align-items-center w-100" style={{ border: 'none' }}>
             <button 
               style={{ cursor: 'pointer', border: 'none' }}
+                onClick={() => {
+                  if (cart.quantity !== 1) {
+                    handleDecreaseQuantity({
+                      productId: cart.productId,
+                      price: cart.price,
+                    });
+                  }
+                }}
               className="button" 
             >
                 <MinusIcon className="minus-icon" width={16}/>
@@ -43,12 +50,9 @@ const CartItem = ({ cart }: { cart: CartItem }) => {
             <button 
               style={{ cursor: 'pointer', border: 'none' }}
               className="button plus"
-              onClick={handleAddToCart.bind(null, {
+              onClick={handleIncreaseQuantity.bind(null, {
                 productId: cart.productId,
-                image: cart.image,
-                title: cart.title,
-                price: cart.price,
-                quantity: 1
+                price: cart.price
               })}
             >
                 <PlusIcon className="plus-icon" width={16}/>

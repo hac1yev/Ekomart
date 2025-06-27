@@ -12,7 +12,7 @@ const useShoppingCart = () => {
 
     const handleAddToCart = async ({ productId,image,title,price,quantity }: Pick<CartItem, keyof Omit<CartItem, 'totalPrice'>>) => {
         try {
-            await axiosPrivate.post("/api/cart", JSON.stringify({ productId, userId, totalPrice: price * quantity }), {
+            await axiosPrivate.post("/api/cart", JSON.stringify({ productId, userId, quantity, totalPrice: price * quantity }), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -21,11 +21,38 @@ const useShoppingCart = () => {
         } catch (error) {
             console.log(error);
         }
-    }; 
+    };
+    
+    const handleIncreaseQuantity = async ({ productId,price }: { productId: number, price: number }) => {        
+        try {
+            await axiosPrivate.put("/api/cart", JSON.stringify({ productId,userId,price,count_type: 'increase' }), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            dispatch(cartSliceAction.increaseProductCount({ productId, price }));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleDecreaseQuantity = async ({ productId,price }: { productId: number, price: number }) => {        
+        try {
+            await axiosPrivate.put("/api/cart", JSON.stringify({ productId,userId,price,count_type: 'decrease' }), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            dispatch(cartSliceAction.decreaseProductCount({ productId, price }));
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleRemoveFromCart = async (productId: number) => {
         try {
             await axiosPrivate.delete(`/api/cart/${productId}`);
+            dispatch(cartSliceAction.deleteProduct({ productId }));
         } catch (error) {
             console.log(error);
         }
@@ -33,7 +60,9 @@ const useShoppingCart = () => {
 
     return {
         handleAddToCart,
-        handleRemoveFromCart
+        handleRemoveFromCart,
+        handleIncreaseQuantity,
+        handleDecreaseQuantity
     }
 }
 

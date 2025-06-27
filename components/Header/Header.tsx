@@ -8,9 +8,11 @@ import Link from "next/link";
 import Search from "./Search";
 import { useTypedFavoriteSelector } from "@/store/favorites-slice";
 import { useHeaderData } from "@/hooks/useHeaderData";
+import { useTypedCartSelector } from "@/store/cart-slice";
 
 const Header = () => {
   const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
+  const cartProducts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
   const { token } = useHeaderData();
 
   return (
@@ -38,7 +40,7 @@ const Header = () => {
                     <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                       <div style={{ position: "relative" }}>
                         <ShoppingCart style={{ flexShrink: 0 }} width={18} />
-                        <span
+                        {cartProducts.length !== 0 && <span
                           className="number"
                           style={{
                             position: "absolute",
@@ -46,8 +48,8 @@ const Header = () => {
                             top: "-6px",
                           }}
                         >
-                          2
-                        </span>
+                          {cartProducts.length}
+                        </span>}
                       </div>
                     </div>
                   </Link>

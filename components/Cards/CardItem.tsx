@@ -115,7 +115,7 @@ const CardItem = (
             image: props.image,
             title: props.title,
             price: props.price,
-            quantity: 1
+            quantity: count
           })}>
             <div className="btn-text d-flex align-items-center gap-2">
               <span>Add</span>

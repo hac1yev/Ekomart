@@ -18507,6 +18507,11 @@ li.with-megamenu:hover .rts-megamenu {
   color: #fff;
 }
 
+.cart-button-wrap:hover span.number {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
 @media only screen and (max-width: 767px) {
   .btn-border-only.wishlist,
   .actions-area .search-btn {

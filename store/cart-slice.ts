@@ -16,7 +16,7 @@ const cartSlice = createSlice({
         getAllCarts(state,action) {
             state.cartProducts = action.payload;
         },
-        addProduct(state, action) {
+        addProduct(state,action) {
             const productIndex = state.cartProducts.findIndex((item) => item.productId === action.payload.productId);
 
             if (productIndex !== -1) {
@@ -25,7 +25,26 @@ const cartSlice = createSlice({
             } else {
                 state.cartProducts.push(action.payload);
             }
-        }
+        },
+        deleteProduct(state,action) {
+            state.cartProducts = state.cartProducts.filter((item) => item.productId !== action.payload.productId);
+        },
+        increaseProductCount(state,action) {
+            const productIndex = state.cartProducts.findIndex((item) => item.productId === action.payload.productId);
+
+            if (productIndex !== -1) {
+                state.cartProducts[productIndex].quantity += 1;
+                state.cartProducts[productIndex].totalPrice += action.payload.price;
+            }
+        },
+        decreaseProductCount(state,action) {
+            const productIndex = state.cartProducts.findIndex((item) => item.productId === action.payload.productId);
+
+            if (productIndex !== -1) {
+                state.cartProducts[productIndex].quantity -= 1;
+                state.cartProducts[productIndex].totalPrice -= action.payload.price;
+            }
+        },
     }
 })
 

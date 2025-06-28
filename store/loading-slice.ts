@@ -6,7 +6,7 @@ type LoadingStateType = {
 }
 
 const initialLoadingState: LoadingStateType = {
-    isLoading: true
+    isLoading: false
 };
 
 const loadingSlice = createSlice({
@@ -20,5 +20,5 @@ const loadingSlice = createSlice({
 });
 
 export const useTypedLoadingSelector: TypedUseSelectorHook<{ loadingReducer: LoadingStateType }> = useSelector; 
-export const LoadingProductsAction = loadingSlice.actions;
+export const LoadingSliceAction = loadingSlice.actions;
 export default loadingSlice;

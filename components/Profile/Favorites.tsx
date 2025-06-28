@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import LinearProgressComponent from "../LoadingProgress/LinearProgressComponent";
 import { FavoriteProductsAction, useTypedFavoriteSelector } from "@/store/favorites-slice";
-import { LoadingProductsAction, useTypedLoadingSelector } from "@/store/loading-slice";
+import { LoadingSliceAction, useTypedLoadingSelector } from "@/store/loading-slice";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -21,14 +21,14 @@ const Favorites = () => {
 
   useEffect(() => {
     (async function () {
-      dispatch(LoadingProductsAction.toggleLoading(true));
+      dispatch(LoadingSliceAction.toggleLoading(true));
       try {
         const response = await axiosPrivate.get("/api/products/favorites");
         dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
       } catch (error) {
         console.log(error);
       } finally {
-        dispatch(LoadingProductsAction.toggleLoading(false));
+        dispatch(LoadingSliceAction.toggleLoading(false));
       }
     })();
   }, [axiosPrivate, dispatch]);

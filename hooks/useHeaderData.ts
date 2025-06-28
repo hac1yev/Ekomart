@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { FavoriteProductsAction } from "@/store/favorites-slice";
-import { LoadingProductsAction } from "@/store/loading-slice";
+import { LoadingSliceAction } from "@/store/loading-slice";
 import { cartSliceAction } from "@/store/cart-slice";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
@@ -21,7 +21,7 @@ export const useHeaderData = () => {
   useEffect(() => {
     if (token) {
       (async () => {
-        dispatch(LoadingProductsAction.toggleLoading(true));
+        dispatch(LoadingSliceAction.toggleLoading(true));
         try {
           const response = await axiosPrivate.get("/api/products/favorites");
           dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
@@ -29,7 +29,7 @@ export const useHeaderData = () => {
         } catch (error) {
           console.error(error);
         } finally {
-          dispatch(LoadingProductsAction.toggleLoading(false));
+          dispatch(LoadingSliceAction.toggleLoading(false));
         }
       })();
     }
@@ -38,14 +38,14 @@ export const useHeaderData = () => {
   useEffect(() => {
     if (token) {
       (async () => {
-        dispatch(LoadingProductsAction.toggleLoading(true));
+        dispatch(LoadingSliceAction.toggleLoading(true));
         try {
           const response = await axiosPrivate.get("/api/cart");
           dispatch(cartSliceAction.getAllCarts(response.data.cartProducts));
         } catch (error) {
           console.error(error);
         } finally {
-          dispatch(LoadingProductsAction.toggleLoading(false));
+          dispatch(LoadingSliceAction.toggleLoading(false));
         }
       })();
     }

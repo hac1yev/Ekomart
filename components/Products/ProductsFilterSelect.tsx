@@ -1,4 +1,4 @@
-import { LoadingProductsAction } from "@/store/loading-slice";
+import { LoadingSliceAction } from "@/store/loading-slice";
 import { ProductSliceActions, useTypedProductSelector } from "@/store/products-slice";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -60,7 +60,7 @@ const ProductsFilterSelect = () => {
 
   useEffect(() => {
     (async function() {
-      dispatch(LoadingProductsAction.toggleLoading(true));
+      dispatch(LoadingSliceAction.toggleLoading(true));
       try {
         const obj = Object.fromEntries(Array.from(searchParams.entries()));
         const allParams: Record<string, string | number> = {
@@ -87,7 +87,7 @@ const ProductsFilterSelect = () => {
       } catch (error) {
         console.log(error);
       }finally{
-        dispatch(LoadingProductsAction.toggleLoading(false));
+        dispatch(LoadingSliceAction.toggleLoading(false));
       }
     })();
   }, [dispatch,searchParams,page]);

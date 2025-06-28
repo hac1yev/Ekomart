@@ -63,7 +63,7 @@ const AddProduct = () => {
   };
 
   return (
-    <form action="#" className="add-product-form" onSubmit={handleAddNewProduct}>
+    <form className="add-product-form" onSubmit={handleAddNewProduct}>
       <h2 className="title">Add New Product</h2>
       <div className="input-half-area">
         <div className="single-input">

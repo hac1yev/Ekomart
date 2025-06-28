@@ -1,10 +1,18 @@
 "use client";
 
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import {
+  LoadingSliceAction,
+} from "@/store/loading-slice";
 import { FormEvent, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const PersonalInformation = () => {
   const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
+  // const isLoading = useTypedLoadingSelector(
+  //   (state) => state.loadingReducer.isLoading
+  // );
   const [personalInfo, setPersonalInfo] = useState({
     firstname: "",
     lastname: "",
@@ -18,26 +26,41 @@ const PersonalInformation = () => {
   const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    dispatch(LoadingSliceAction.toggleLoading(true));
     try {
+      await axiosPrivate.put(
+        "/api/profile",
+        JSON.stringify({
+          firstname: personalInfo.firstname,
+          lastname: personalInfo.lastname,
+          phone: personalInfo.phone,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(LoadingSliceAction.toggleLoading(false));
     }
-  };  
+  };
 
   useEffect(() => {
-    (async function() {
-        try {
-            const response = await axiosPrivate.get("/api/profile")            
-            setPersonalInfo(response.data.user);
-        } catch (error) {
-            console.log(error);
-        }
-    })()
+    (async function () {
+      try {
+        const response = await axiosPrivate.get("/api/profile");
+        setPersonalInfo(response.data.user);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, [axiosPrivate]);
 
   return (
     <form
-      action="#"
       className="add-product-form"
       onSubmit={handleUpdateProfile}
     >
@@ -77,8 +100,8 @@ const PersonalInformation = () => {
             }
           />
         </div>
-    </div>
-    <div className="input-half-area">
+      </div>
+      <div className="input-half-area">
         <div className="single-input">
           <label htmlFor="username">Username*</label>
           <input
@@ -99,10 +122,9 @@ const PersonalInformation = () => {
             disabled
           />
         </div>
-    </div>
-        
-        <div className="input-half-area">
-            <div className="single-input">
+      </div>
+      <div className="input-half-area">
+        <div className="single-input">
           <label htmlFor="phone">Phone*</label>
           <input
             type="text"
@@ -128,7 +150,7 @@ const PersonalInformation = () => {
             disabled
           />
         </div>
-        </div>
+      </div>
       <div className="single-input">
         <label htmlFor="role">Role*</label>
         <input
@@ -139,7 +161,9 @@ const PersonalInformation = () => {
           disabled
         />
       </div>
-      <button className="rts-btn btn-primary">Save Change</button>
+      <button className="rts-btn btn-primary">
+        Save Change
+      </button>
     </form>
   );
 };

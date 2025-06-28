@@ -29,7 +29,7 @@ const DiscountCardItem = ({ id, discount, image, title, price, value, brand }: P
             {discount}% <br />
             Off
           </span>
-          <Image src={bookmark} width={50} height={50} alt="bookmark" priority />
+          <Image src={bookmark} width={50} alt="bookmark" priority />
         </div>
         <Image
           width={300}

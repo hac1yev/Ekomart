@@ -104,7 +104,7 @@ const Footer = () => {
                         </div>
                         <div className="payment-access">
                             <span>Payment Accepts:</span>
-                            <Image width={300} height={20} src={payment} alt="payment" priority />
+                            <Image width={300} src={payment} alt="payment" priority />
                         </div>
                     </div>
                 </div>

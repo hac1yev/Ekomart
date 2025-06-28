@@ -14,9 +14,10 @@ const CartItem = ({ cart }: { cart: CartItem }) => {
         <div className="thumbnail">
           <Image 
             src={cart.image}
-            width={65}
-            height={45}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt={cart.title}
+            style={{ objectFit: 'cover' }}
           />
         </div>
         <div className="information">

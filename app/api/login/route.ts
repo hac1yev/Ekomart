@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
 
         const accessToken = await new SignJWT({ 
             email,
+            userId: result.recordset[0].userId,
             role: result.recordset[0].role
         })
         .setProtectedHeader({ alg: 'HS256' })
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
 
         const refreshToken = await new SignJWT({ 
             email,
+            userId: result.recordset[0].userId,
             role: result.recordset[0].role
         })
         .setProtectedHeader({ alg: 'HS256' })
@@ -47,9 +49,7 @@ export async function POST(req: NextRequest) {
         .sign(refreshSecretKey);
 
         const response = NextResponse.json({ 
-            userId: result.recordset[0].userId,
-            username: result.recordset[0].username,
-            role: result.recordset[0].role,
+            ...result.recordset[0],
             accessToken,
         });
 

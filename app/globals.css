@@ -23508,10 +23508,18 @@ div.error-bg > p {
     align-items: flex-start;
     gap: 10px;
   }
+
+  .rts-cart-list-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  
+  }
 }
 
 .single-cart-area-list.main .product-main-cart .thumbnail {
-  max-width: 65px;
+  position: relative;
+  width: 65px;
+  height: 45px;
 }
 
 .single-cart-area-list.main .product-main-cart .information .title {
@@ -25112,6 +25120,14 @@ div.error-bg > p {
   border-radius: 4px;
   border: 1px solid #E8E8E8;
   margin-bottom: 15px;
+}
+
+.add-product-form input:disabled {
+  color: #ccc;
+}
+
+.add-product-form input:disabled:hover {
+  cursor: not-allowed;
 }
 
 .add-product-form .single-input > label {

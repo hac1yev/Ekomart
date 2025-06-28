@@ -281,7 +281,7 @@ const AddProduct = () => {
           })}
         ></textarea>
       </div>
-      <button className="rts-btn btn-primary">Save Change</button>
+      <button className="rts-btn btn-primary">Add Product</button>
     </form>
   );
 };

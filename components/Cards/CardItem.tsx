@@ -47,7 +47,6 @@ const CardItem = (
             <Image
               src={bookmark}
               width={50}
-              height={50}
               alt="bookmark"
               priority
             />

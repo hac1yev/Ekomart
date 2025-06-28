@@ -32,7 +32,7 @@ const RtsFeature = () => {
                                 <Image 
                                     src={rtsPolicy}
                                     width={45}
-                                    height={45}
+                                    // height={45}
                                     alt="best-policy"
                                     priority
                                 />
@@ -66,7 +66,7 @@ const RtsFeature = () => {
                                 <Image 
                                     src={rtsPrice}
                                     width={45}
-                                    height={45}
+                                    // height={45}
                                     alt="best-prices"
                                     priority
                                 />

@@ -27,6 +27,7 @@ const TrendingProductsWrapper = () => {
                         src={bookmark}
                         width={50}
                         height={50}
+                        style={{ height: "auto" }}
                         alt="bookmark"
                         priority
                       />

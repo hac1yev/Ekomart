@@ -18294,7 +18294,6 @@ li.with-megamenu:hover .rts-megamenu {
 
 .rts-btn:focus {
   box-shadow: none !important;
-  border: none !important;
 }
 
 .rts-btn.btn-primary {

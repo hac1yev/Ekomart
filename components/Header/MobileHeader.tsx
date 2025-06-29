@@ -36,7 +36,7 @@ const MobileHeader = () => {
                 <UserIcon width={18} />
               </div>
             </Link>
-            <div className={"btn-border-only cart category-hover-header"}>
+            <Link href={"/"} className={"btn-border-only cart category-hover-header"}>
               <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                 <div style={{ position: "relative" }}>
                   <Bell style={{ flexShrink: 0 }} width={18} />
@@ -48,8 +48,8 @@ const MobileHeader = () => {
                   </span>
                 </div>
               </div>
-            </div>
-            <div className={"btn-border-only cart category-hover-header"}>
+            </Link>
+            <Link href="/cart" className={"btn-border-only cart category-hover-header"}>
               <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
                 <div style={{ position: "relative" }}>
                   <ShoppingCart style={{ flexShrink: 0 }} width={18} />
@@ -61,7 +61,7 @@ const MobileHeader = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
           <div className="actions-area">
             <div className="menu-btn" onClick={handleShowMobileMenu}>

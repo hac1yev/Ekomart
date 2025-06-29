@@ -39,7 +39,7 @@ const AddProduct = () => {
       });      
 
       if(response.status === 200) {
-        setProductItems({ title: "", life: new Date().toISOString().split('T')[0], discount: "", price: "", tags: [], categories: [], type: "", status: "", description: "", additionalInfo: "", image: { name: "", url: "" }, brand: "" });
+        setProductItems({});
         toast.success("New product added successfully.");
       }
     } catch (error) {

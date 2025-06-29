@@ -7,11 +7,9 @@ import { useState } from "react";
 import Sidebar from "../Navbar/Sidebar";
 import Link from "next/link";
 import { useHeaderData } from "@/hooks/useHeaderData";
-// import { useTypedFavoriteSelector } from "@/store/favorites-slice";
 
 const MobileHeader = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  // const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
   const { token } = useHeaderData();
 
   const handleShowMobileMenu = () => {

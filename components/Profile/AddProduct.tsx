@@ -3,6 +3,7 @@
 import { UploadButton } from "@/app/lib/uploadthing";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { FormEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import Select from "react-select";
 
 const AddProduct = () => {
@@ -55,10 +56,11 @@ const AddProduct = () => {
 
       if(response.status === 200) {
         setProductItems({ title: "", life: new Date().toISOString().split('T')[0], discount: "", price: "", tags: [], categories: [], type: "", status: "", description: "", additionalInfo: "", image: { name: "", url: "" }, brand: "" });
+        toast.success("New product added successfully.");
       }
-      
     } catch (error) {
       console.log(error);
+      toast.error("An unexpected error occurred.");
     }
   };
 

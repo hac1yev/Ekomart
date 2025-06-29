@@ -3,16 +3,16 @@
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import {
   LoadingSliceAction,
+  useTypedLoadingSelector,
 } from "@/store/loading-slice";
 import { FormEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 const PersonalInformation = () => {
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
-  // const isLoading = useTypedLoadingSelector(
-  //   (state) => state.loadingReducer.isLoading
-  // );
+  const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
   const [personalInfo, setPersonalInfo] = useState({
     firstname: "",
     lastname: "",
@@ -28,21 +28,23 @@ const PersonalInformation = () => {
 
     dispatch(LoadingSliceAction.toggleLoading(true));
     try {
-      await axiosPrivate.put(
-        "/api/profile",
-        JSON.stringify({
+      const response = await axiosPrivate.put("/api/profile", JSON.stringify({
           firstname: personalInfo.firstname,
           lastname: personalInfo.lastname,
           phone: personalInfo.phone,
-        }),
-        {
+        }), {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
+
+      if(response.status === 200) {
+        toast.success("Your profile has been updated.");
+      }
     } catch (error) {
       console.log(error);
+      toast.error("An unexpected error occurred.");
     } finally {
       dispatch(LoadingSliceAction.toggleLoading(false));
     }
@@ -161,7 +163,14 @@ const PersonalInformation = () => {
           disabled
         />
       </div>
-      <button className="rts-btn btn-primary">
+      <button 
+        className="rts-btn btn-primary" 
+        disabled={isLoading} 
+        style={isLoading ? { 
+          opacity: 0.6, cursor: 
+          'not-allowed' 
+          } : { opacity: 1 }
+        }>
         Save Change
       </button>
     </form>

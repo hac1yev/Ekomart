@@ -4,6 +4,7 @@ import { ProductSliceActions } from '@/store/products-slice';
 import { homePageSliceAction } from '@/store/home-slice';
 import { ProductDetailSliceActions } from '@/store/product-detail-slice';
 import { FavoriteProductsAction } from '@/store/favorites-slice';
+import toast from 'react-hot-toast';
 
 const useFavorite = (componentType: string) => {
     const axiosPrivate = useAxiosPrivate();
@@ -15,7 +16,7 @@ const useFavorite = (componentType: string) => {
 
     const handleAddFavorite = async (productId: number) => {
         try {
-            await axiosPrivate.post(`/api/products/favorites`, JSON.stringify({ productId, userId }), {
+            const response = await axiosPrivate.post(`/api/products/favorites`, JSON.stringify({ productId, userId }), {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -36,14 +37,19 @@ const useFavorite = (componentType: string) => {
                     break;
             }
             dispatch(FavoriteProductsAction.increaseFavCount());
+
+            if(response.status === 200) {
+                toast.success("Product added to favorites.");
+            }
         } catch (error) {
             console.log(error);
+            toast.error("An unexpected error occurred.");
         }
     };
 
     const handleRemoveFavorite = async (productId: number) => {    
         try {
-            await axiosPrivate.delete(`/api/products/favorites/${productId}`);
+            const response = await axiosPrivate.delete(`/api/products/favorites/${productId}`);
             
             switch(componentType) {
                 case 'detailContent':
@@ -63,8 +69,13 @@ const useFavorite = (componentType: string) => {
                     break;
             }
             dispatch(FavoriteProductsAction.decreaseFavCount());
+
+            if(response.status === 200) {
+                toast.success("Product removed from favorites.");
+            }
         } catch (error) {
             console.log(error);
+            toast.error("An unexpected error occurred.");
         }
     };
 

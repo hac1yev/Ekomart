@@ -1,7 +1,7 @@
 import { getAverageRating, getReviewCount } from "@/app/lib/getRating"
 import RatingStar from "../RatingStar/RatingStar";
 import StaticRatingStar from "../RatingStar/StaticRatingStar";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useCallback, useMemo, useState } from "react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useParams } from "next/navigation";
 
@@ -25,14 +25,14 @@ const TabCustomer = ({ productDetailRatingResult }: { productDetailRatingResult:
     return getAverageRating(filteredRating)?.toFixed(1);
   }, [filteredRating]);
 
-  const handleChangeRating = (star: number) => {
+  const handleChangeRating = useCallback((star: number) => {
     setRatingData(prev => {
       return {
         ...prev,
         star,
       }
     })
-  };
+  }, []);
 
   const handleSubmitRating = async (e: FormEvent) => {
     e.preventDefault();

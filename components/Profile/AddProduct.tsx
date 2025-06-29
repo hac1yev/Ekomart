@@ -9,26 +9,10 @@ import Select from "react-select";
 const AddProduct = () => {
   const axiosPrivate = useAxiosPrivate();
   const [selectData,setSelectData] = useState<AddProductSelectType>({});
+  const [productItems,setProductItems] = useState<ProductItem>({});
   const userId: number = typeof window !== "undefined" && localStorage.getItem("userInfo") 
     ? JSON.parse(localStorage.getItem("userInfo") || "{}").userId 
     : "";     
-  const [productItems,setProductItems] = useState<ProductItem>({
-    title: "",
-    life: new Date().toISOString().split('T')[0],
-    discount: "",
-    price: "",
-    tags: [],
-    categories: [],
-    type: "",
-    status: "",
-    description: "",
-    additionalInfo: "",
-    image: {
-      name: "",
-      url: ""
-    },
-    brand: ""
-  });
 
   useEffect(() => {
     (async function() {
@@ -74,7 +58,7 @@ const AddProduct = () => {
             type="text" 
             placeholder="Enter title:" 
             id="title"
-            value={productItems.title} 
+            value={productItems.title as string}
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -88,7 +72,7 @@ const AddProduct = () => {
           <input 
             type="date" 
             id="lifespan"
-            value={productItems.life} 
+            value={productItems.life as string} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -105,7 +89,7 @@ const AddProduct = () => {
             type="number" 
             id="Discount"
             placeholder="Discount:" 
-            value={productItems.discount} 
+            value={productItems.discount as number} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -120,7 +104,7 @@ const AddProduct = () => {
             type="number" 
             id="price"
             placeholder="Price:" 
-            value={productItems.price} 
+            value={productItems.price as number} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -140,7 +124,7 @@ const AddProduct = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Select tags:"
-            value={productItems.tags}
+            value={productItems.tags as OptionType[]}
             onChange={(selectedOption) => setProductItems((prev) => {               
               return {
                 ...prev,
@@ -160,7 +144,7 @@ const AddProduct = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Select categories:"
-            value={productItems.categories}
+            value={productItems.categories as OptionType[]}
             onChange={(selectedOption) => setProductItems((prev) => { 
               return {
                 ...prev,
@@ -220,7 +204,7 @@ const AddProduct = () => {
           type="text" 
           id="brand"
           placeholder="Enter brand:" 
-          value={productItems.brand} 
+          value={productItems.brand as string} 
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,
@@ -233,7 +217,9 @@ const AddProduct = () => {
         <UploadButton
           endpoint="imageUploader"
           content={{
-            button: productItems.image.name || "Upload Image",
+            button: typeof productItems.image === "object" && 
+                    "name" in productItems.image && 
+                    productItems.image.name || "Upload Image",
           }}
           onClientUploadComplete={(res) => {            
             setProductItems((prev) => {
@@ -258,7 +244,7 @@ const AddProduct = () => {
           rows={5}
           name="description"
           id="description"
-          value={productItems.description}
+          value={productItems.description as string}
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,
@@ -274,7 +260,7 @@ const AddProduct = () => {
           rows={5}
           name="additionalInfo"
           id="additionalInfo"
-          value={productItems.additionalInfo}
+          value={productItems.additionalInfo as string}
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,

@@ -61,21 +61,8 @@ declare type AddProductSelectType = {
 declare type OptionType = { value: number; label: string };
 
 declare type ProductItem = {
-  title: string;
-  life: string;
-  discount: number | string;
-  price: number | string;
-  brand: string;
-  tags: OptionType[];
-  categories: OptionType[];
-  type: OptionType | number | string;
-  status: OptionType | number | string;
-  image: {
-    [key: string]: string;
-  };
-  description: string;
-  additionalInfo: string;
-};
+  [key: string]: string | number | OptionType[] | { [key: string]: string }
+}
 
 declare type ProductDetailContentType = {
   id: number;

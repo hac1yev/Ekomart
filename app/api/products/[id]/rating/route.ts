@@ -3,6 +3,8 @@ import { verifyJWTToken } from "@/app/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { star,reviewMessage,userId } = await req.json();
 
@@ -17,8 +19,6 @@ export async function POST(req: NextRequest) {
         if(!isValidAccessToken) {
             return NextResponse.json({ message: 'Forbidden!' }, { status: 403 });
         }    
-
-        const pool = await connectToDB();
 
         const result = await pool.request().query(`
             select * from ProductRatings where productId = ${productId} and userId = ${userId}
@@ -47,10 +47,10 @@ export async function POST(req: NextRequest) {
                 `);
         }
         
-        await pool.close();
-
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 }

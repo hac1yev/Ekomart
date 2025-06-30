@@ -3,6 +3,8 @@ import { verifyJWTToken } from "@/app/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const productId = req.url.split("/").at(-1);
         const bearer = req.headers.get("Authorization");
@@ -13,8 +15,6 @@ export async function DELETE(req: NextRequest) {
         if(!isValidAccessToken) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
-
-        const pool = await connectToDB();
 
         const userResult = await pool.request().query(`
             select userId from Users where email = '${isValidAccessToken.email}'    
@@ -29,5 +29,7 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
         NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 }

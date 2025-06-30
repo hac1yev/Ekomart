@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import sql from 'mssql';
 
 export async function GET(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const url = req.url;
         const searchParams = url.split('?')[1] || "";
@@ -16,8 +18,6 @@ export async function GET(req: NextRequest) {
         const isVerifyRefreshToken = await verifyRefreshToken(refreshToken);
     
         let query;
-
-        const pool = await connectToDB();
 
         if(!isVerifyRefreshToken) {
             query = `
@@ -83,13 +83,8 @@ export async function GET(req: NextRequest) {
 
             query += arr.join(' and ');  
         }      
-
-        const connection = await connectToDB();
         
-        const productsRequest = await connection.request().query(query);  
-
-        await pool.close();
-        await connection.close();
+        const productsRequest = await pool.request().query(query);  
 
         const resultProducts = productsRequest.recordset.reduce((resultArr, item) => {
             const { id,categories,tags } = item;
@@ -116,10 +111,14 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ products: resultProducts.slice((page-1)*12, page*12), totalProducts: resultProducts.length });
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 } 
 
 export async function POST(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { title,discount,image,description,additionalInfo,price,life,type,status,tags,categories,brand,userId } = await req.json();
         const bearer = req.headers.get("Authorization") || "";
@@ -129,8 +128,6 @@ export async function POST(req: NextRequest) {
         if(!isVerifyAccessToken) {
             return NextResponse.json({ message: 'Forbidden!' }, { status: 403 });
         }
-
-        const pool = await connectToDB();
 
         const insertProductRequest = await pool.request()
             .input("discount", sql.Int, discount)
@@ -182,10 +179,10 @@ export async function POST(req: NextRequest) {
             .input("reviewMessage", sql.VarChar, null)
             .query(`insert into ProductRatings values (@productId, @userId, @star, @createdAt, @reviewMessage)`);
 
-        await pool.close();
-
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 };

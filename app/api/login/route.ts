@@ -4,10 +4,10 @@ import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { email,password } = await req.json();
-
-        const pool = await connectToDB();
         
         const result = await pool.request().query(`
             select * from Users where email = '${email}'
@@ -62,10 +62,10 @@ export async function POST(req: NextRequest) {
             secure: true   
         });
     
-        await pool.close();
-
         return response;
     } catch (error) {
         return NextResponse.json({ error });
+    } finally {
+        pool.close();
     }
 }

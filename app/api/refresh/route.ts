@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         .setExpirationTime('1d')
         .sign(jwtSecretKey);
         
-        await pool.close();
+        pool.close();
 
         return NextResponse.json({
             newAccessToken,

@@ -5,15 +5,12 @@ import rtsDollar from '../../../public/images/rts/rts-dollar.svg'
 import Image from 'next/image';
 
 const RtsFeature = () => {
-    const handleClick = () => {
-        
-    };
 
     return (
         <div className="rts-feature-area rts-section-gap">
             <div className="container">
                 <div className="row g-4">
-                    <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12" onClick={handleClick}>
+                    <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
                         <div className="single-feature-area">
                             <div className="icon">
                                 <Image 

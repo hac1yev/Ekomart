@@ -12,7 +12,9 @@ import { useDispatch } from "react-redux";
 const PersonalInformation = () => {
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
-  const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
+  const isLoading = useTypedLoadingSelector(
+    (state) => state.loadingReducer.isLoading
+  );
   const [personalInfo, setPersonalInfo] = useState({
     firstname: "",
     lastname: "",
@@ -22,24 +24,31 @@ const PersonalInformation = () => {
     email: "",
     birthday: new Date().toISOString(),
   });
+  const [passwords,setPasswords] = useState({
+    old: "",
+    new: ""
+  });
 
   const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     dispatch(LoadingSliceAction.toggleLoading(true));
     try {
-      const response = await axiosPrivate.put("/api/profile", JSON.stringify({
+      const response = await axiosPrivate.put(
+        "/api/profile",
+        JSON.stringify({
           firstname: personalInfo.firstname,
           lastname: personalInfo.lastname,
           phone: personalInfo.phone,
-        }), {
+        }),
+        {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      if(response.status === 200) {
+      if (response.status === 200) {
         toast.success("Your profile has been updated.");
       }
     } catch (error) {
@@ -49,6 +58,26 @@ const PersonalInformation = () => {
       dispatch(LoadingSliceAction.toggleLoading(false));
     }
   };
+
+  const handleChangePassword = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosPrivate.post("/api/profile/change-password", JSON.stringify({
+        old_pswrd: passwords.old,
+        new_pswrd: passwords.new
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     (async function () {
@@ -62,118 +91,177 @@ const PersonalInformation = () => {
   }, [axiosPrivate]);
 
   return (
-    <form
-      className="add-product-form"
-      onSubmit={handleUpdateProfile}
-    >
-      <h2 className="title">Personal Information</h2>
-      <div className="input-half-area">
-        <div className="single-input">
-          <label htmlFor="firstname">Firstname*</label>
-          <input
-            type="text"
-            placeholder="Enter Firstname:"
-            id="firstname"
-            value={personalInfo.firstname}
-            onChange={(e) =>
-              setPersonalInfo((prev) => {
-                return {
-                  ...prev,
-                  firstname: e.target.value,
-                };
-              })
-            }
-          />
+    <>
+      <form className="add-product-form" onSubmit={handleUpdateProfile}>
+        <h2 className="title">Personal Information</h2>
+        <div className="input-half-area">
+          <div className="single-input">
+            <label htmlFor="firstname">Firstname*</label>
+            <input
+              type="text"
+              placeholder="Enter Firstname:"
+              id="firstname"
+              value={personalInfo.firstname}
+              onChange={(e) =>
+                setPersonalInfo((prev) => {
+                  return {
+                    ...prev,
+                    firstname: e.target.value,
+                  };
+                })
+              }
+            />
+          </div>
+          <div className="single-input">
+            <label htmlFor="lastname">Lastname*</label>
+            <input
+              type="text"
+              placeholder="Enter Lastname:"
+              id="lastname"
+              value={personalInfo.lastname}
+              onChange={(e) =>
+                setPersonalInfo((prev) => {
+                  return {
+                    ...prev,
+                    lastname: e.target.value,
+                  };
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="input-half-area">
+          <div className="single-input">
+            <label htmlFor="username">Username*</label>
+            <input
+              type="text"
+              placeholder="Enter Username:"
+              id="username"
+              value={personalInfo.username}
+              disabled
+            />
+          </div>
+          <div className="single-input">
+            <label htmlFor="email">Email*</label>
+            <input
+              type="text"
+              placeholder="Enter Email:"
+              id="email"
+              value={personalInfo.email}
+              disabled
+            />
+          </div>
+        </div>
+        <div className="input-half-area">
+          <div className="single-input">
+            <label htmlFor="phone">Phone*</label>
+            <input
+              type="text"
+              placeholder="Enter Phone:"
+              id="phone"
+              value={personalInfo.phone}
+              onChange={(e) =>
+                setPersonalInfo((prev) => {
+                  return {
+                    ...prev,
+                    phone: e.target.value,
+                  };
+                })
+              }
+            />
+          </div>
+          <div className="single-input">
+            <label htmlFor="birthday">Birthday*</label>
+            <input
+              type="date"
+              id="birthday"
+              value={personalInfo.birthday.split("T")[0]}
+              disabled
+            />
+          </div>
         </div>
         <div className="single-input">
-          <label htmlFor="lastname">Lastname*</label>
+          <label htmlFor="role">Role*</label>
           <input
             type="text"
-            placeholder="Enter Lastname:"
-            id="lastname"
-            value={personalInfo.lastname}
-            onChange={(e) =>
-              setPersonalInfo((prev) => {
-                return {
-                  ...prev,
-                  lastname: e.target.value,
-                };
-              })
-            }
-          />
-        </div>
-      </div>
-      <div className="input-half-area">
-        <div className="single-input">
-          <label htmlFor="username">Username*</label>
-          <input
-            type="text"
-            placeholder="Enter Username:"
-            id="username"
-            value={personalInfo.username}
+            placeholder="Enter Role:"
+            id="role"
+            value={personalInfo.role}
             disabled
           />
         </div>
-        <div className="single-input">
-          <label htmlFor="email">Email*</label>
-          <input
-            type="text"
-            placeholder="Enter Email:"
-            id="email"
-            value={personalInfo.email}
-            disabled
-          />
+        <button
+          className="rts-btn btn-primary"
+          disabled={isLoading}
+          style={
+            isLoading
+              ? {
+                  opacity: 0.6,
+                  cursor: "not-allowed",
+                }
+              : { opacity: 1 }
+          }
+        >
+          Save Change
+        </button>
+      </form>
+
+      <hr className="mt--35" />
+
+      <form className="add-product-form" onSubmit={handleChangePassword}>
+        <h2 className="title">Change Password</h2>
+        <div className="input-half-area">
+          <div className="single-input">
+            <label htmlFor="old_pswrd">Old Password*</label>
+            <input
+              type="password"
+              placeholder="Enter old password:"
+              id="old_pswrd"
+              value={passwords.old}
+              onChange={(e) => {
+                setPasswords((prev) => {
+                  return {
+                    ...prev,
+                    old: e.target.value
+                  }
+                })
+              }}
+            />
+          </div>
+          <div className="single-input">
+            <label htmlFor="new_pswrd">New Password*</label>
+            <input
+              type="password"
+              placeholder="Enter new password:"
+              id="new_pswrd"
+              value={passwords.new}
+              onChange={(e) => {
+                setPasswords((prev) => {
+                  return {
+                    ...prev,
+                    new: e.target.value
+                  }
+                })
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className="input-half-area">
-        <div className="single-input">
-          <label htmlFor="phone">Phone*</label>
-          <input
-            type="text"
-            placeholder="Enter Phone:"
-            id="phone"
-            value={personalInfo.phone}
-            onChange={(e) =>
-              setPersonalInfo((prev) => {
-                return {
-                  ...prev,
-                  phone: e.target.value,
-                };
-              })
-            }
-          />
-        </div>
-        <div className="single-input">
-          <label htmlFor="birthday">Birthday*</label>
-          <input
-            type="date"
-            id="birthday"
-            value={personalInfo.birthday.split("T")[0]}
-            disabled
-          />
-        </div>
-      </div>
-      <div className="single-input">
-        <label htmlFor="role">Role*</label>
-        <input
-          type="text"
-          placeholder="Enter Role:"
-          id="role"
-          value={personalInfo.role}
-          disabled
-        />
-      </div>
-      <button 
-        className="rts-btn btn-primary" 
-        disabled={isLoading} 
-        style={isLoading ? { 
-          opacity: 0.6, cursor: 
-          'not-allowed' 
-          } : { opacity: 1 }
-        }>
-        Save Change
-      </button>
-    </form>
+        <button
+          className="rts-btn btn-primary"
+          disabled={isLoading}
+          style={
+            isLoading
+              ? {
+                  opacity: 0.6,
+                  cursor: "not-allowed",
+                }
+              : { opacity: 1 }
+          }
+        >
+          Confirm
+        </button>
+      </form>
+    </>
   );
 };
 

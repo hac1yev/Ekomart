@@ -7,6 +7,7 @@ import homePageSlice from "./home-slice";
 import favoriteSlice from "./favorites-slice";
 import loadingSlice from "./loading-slice";
 import cartSlice from "./cart-slice";
+import notificationSlice from "./notification-slice";
 
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
         homePageReducer: homePageSlice.reducer,
         favoriteReducer: favoriteSlice.reducer,
         loadingReducer: loadingSlice.reducer,
-        cartReducer: cartSlice.reducer
+        cartReducer: cartSlice.reducer,
+        notificationReducer: notificationSlice.reducer
     }
 });

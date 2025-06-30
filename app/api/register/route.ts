@@ -4,9 +4,10 @@ import sql from "mssql";
 import { hashPassword } from "@/app/lib/hashPassword";
 
 export async function POST(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { email,username,password,firstname,lastname,phone,birthday } = await req.json();
-        const pool = await connectToDB();
         const hasEmailOrUsername = await pool.request().query(`
             SELECT email, username 
             FROM Users 
@@ -32,10 +33,10 @@ export async function POST(req: NextRequest) {
                 insert into Users values(@username, @email, @role, @password, @phone, @birthday, @firstname, @lastname)    
             `);
         
-        await pool.close();
-
         return NextResponse.json({ message: 'Your user has created!' });
     } catch (error) {        
         return NextResponse.json({ error });
+    } finally {
+        pool.close();
     }
 }

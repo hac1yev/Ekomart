@@ -9,13 +9,18 @@ import Search from "./Search";
 import { useTypedFavoriteSelector } from "@/store/favorites-slice";
 import { useHeaderData } from "@/hooks/useHeaderData";
 import { useTypedCartSelector } from "@/store/cart-slice";
+import useNotification from "@/hooks/useNotification";
 
 const Header = () => {
   const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
   const cartProducts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
   const { token } = useHeaderData();
+  const { notifications } = useNotification();
 
+  console.log(notifications);
+  
   return (
+
     <>
       <div className="search-header-area-main">
         <div className="container">

@@ -4,6 +4,8 @@ import sql from 'mssql';
 import { verifyJWTToken } from "@/app/lib/verifyToken";
 
 export async function POST(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { productId,userId,totalPrice,quantity } = await req.json();
         const bearer = req.headers.get('Authorization');
@@ -14,8 +16,6 @@ export async function POST(req: NextRequest) {
         if(!isValidJwtToken) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
-
-        const pool = await connectToDB();
         
         const hasProduct = await pool.request().query(`
             select id from Cart where userId = ${userId} and productId = ${productId}
@@ -47,10 +47,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Success' }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 }
 
 export async function GET(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const bearer = req.headers.get("Authorization");
         const accessToken =  bearer?.split(" ")[1] || "";
@@ -60,8 +64,6 @@ export async function GET(req: NextRequest) {
         if(!isValidJwtToken) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
-
-        const pool = await connectToDB();
 
         const result = await pool.request().query(`
             SELECT 
@@ -81,10 +83,14 @@ export async function GET(req: NextRequest) {
 
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });
+    } finally {
+        pool.close();
     }
 }
 
 export async function PUT(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const { productId,userId,price,count_type } = await req.json();
         const bearer = req.headers.get("Authorization");
@@ -96,8 +102,6 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
         
-        const pool = await connectToDB();
-
         if(count_type === 'increase') {
             await pool.request()
                 .input("productId", sql.Int, productId)
@@ -125,5 +129,7 @@ export async function PUT(req: NextRequest) {
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
+    } finally {
+        pool.close();
     }
 }

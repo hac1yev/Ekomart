@@ -3,18 +3,19 @@ import { verifyRefreshToken } from "@/app/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const pool = await connectToDB();
+
+  try {
     const url = req.url;
     const id = url.split("/").at(-1) || "";
-    
-    const refreshToken =  req.cookies.get("refreshToken")?.value || "";
-    const isValidRefreshToken = await verifyRefreshToken(refreshToken);
 
-    const pool = await connectToDB();
+    const refreshToken = req.cookies.get("refreshToken")?.value || "";
+    const isValidRefreshToken = await verifyRefreshToken(refreshToken);
 
     let query;
 
-    if(!isValidRefreshToken) {
-        query = `
+    if (!isValidRefreshToken) {
+      query = `
             select p.*, c.label [categories], t.label [tags], s.label [status_content], ty.label [type_content]
             from Products p left join ProductCategories pc
             on p.id = pc.productId left join Categories c
@@ -25,18 +26,21 @@ export async function GET(req: NextRequest) {
             on p.type = ty.value
             where p.id = ${id}
         `;
-    }else{
-        const userResult = await pool.request().query(`
+    } else {
+      const userResult = await pool.request().query(`
             select userId from Users where email = '${isValidRefreshToken.email}'
         `);
 
-        if (!userResult.recordset.length) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
-        }
+      if (!userResult.recordset.length) {
+        return NextResponse.json(
+          { message: "User not found" },
+          { status: 404 }
+        );
+      }
 
-        const { userId } = userResult.recordset[0];
+      const { userId } = userResult.recordset[0];
 
-        query = `
+      query = `
             select p.*, c.label [categories], t.label [tags], s.label [status_content], ty.label [type_content],
             case 
                 when lp.productId is not null and lp.userId = ${userId} then 1
@@ -70,33 +74,36 @@ export async function GET(req: NextRequest) {
         WHERE p.id = ${id}
         GROUP BY p.id, s.star
         ORDER BY s.star;
-    `);    
+    `);
 
     const resultProduct = result.recordset.reduce((resultArr, item) => {
-        const { id,categories,tags } = item;
-        const index = resultArr.findIndex((obj: ProductType) => obj.id === id);
+      const { id, categories, tags } = item;
+      const index = resultArr.findIndex((obj: ProductType) => obj.id === id);
 
-        if (index === -1) {
-            resultArr.push({
-                ...item,
-                categories: [categories],
-                tags: [tags]
-            });
-        }else{
-            if(!resultArr[index].categories.includes(categories)) {
-                resultArr[index].categories.push(categories);
-            }
-            if(!resultArr[index].tags.includes(tags)) {
-                resultArr[index].tags.push(tags);
-            }
+      if (index === -1) {
+        resultArr.push({
+          ...item,
+          categories: [categories],
+          tags: [tags],
+        });
+      } else {
+        if (!resultArr[index].categories.includes(categories)) {
+          resultArr[index].categories.push(categories);
         }
+        if (!resultArr[index].tags.includes(tags)) {
+          resultArr[index].tags.push(tags);
+        }
+      }
 
-        return resultArr;
-    }, []);   
-    
+      return resultArr;
+    }, []);
+
     resultProduct[0].ratingResult = ratingResult.recordset;
 
-    await pool.close();
-    
-    return NextResponse.json({ message: 'Success', product: resultProduct[0] });
+    return NextResponse.json({ message: "Success", product: resultProduct[0] });
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  } finally {
+    pool.close();
+  }
 }

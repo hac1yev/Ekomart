@@ -3,11 +3,12 @@ import { verifyRefreshToken } from "@/app/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+    const pool = await connectToDB();
+
     try {
         const refreshToken = req.cookies.get("refreshToken")?.value || "";
         const isVerifyRefreshToken = await verifyRefreshToken(refreshToken);
         
-        const pool = await connectToDB();
         let query;
         
         if(isVerifyRefreshToken) {
@@ -80,10 +81,10 @@ export async function GET(req: NextRequest) {
             return productDate >= oneWeekAgo && productDate <= today;
         });        
 
-        await pool.close();
-
         return NextResponse.json({ discountProducts, trendingProducts, featuredProducts, weeklyProducts });
     } catch (error) {
         return NextResponse.json({ message: error });
+    } finally {
+        pool.close();
     }
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import {
-  LoadingSliceAction,
-  useTypedLoadingSelector,
-} from "@/store/loading-slice";
+import useUserInfo from "@/hooks/useUserInfo";
+import { socket } from "@/socket-client";
+import { LoadingSliceAction,useTypedLoadingSelector } from "@/store/loading-slice";
 import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -12,9 +11,8 @@ import { useDispatch } from "react-redux";
 const PersonalInformation = () => {
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
-  const isLoading = useTypedLoadingSelector(
-    (state) => state.loadingReducer.isLoading
-  );
+  const user = useUserInfo();
+  const isLoading = useTypedLoadingSelector((state) => state.loadingReducer.isLoading);
   const [personalInfo, setPersonalInfo] = useState({
     firstname: "",
     lastname: "",
@@ -28,6 +26,7 @@ const PersonalInformation = () => {
     old: "",
     new: ""
   });
+
 
   const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,10 +71,31 @@ const PersonalInformation = () => {
         }
       });
 
-      console.log(response);
+      if(response.status === 200) {
+        setPasswords({ old: "", new: "" });
+        toast.success("Password successfully changed.");
+
+        const notificationObj = {
+          userId: user?.userId,
+          title: 'Pasword Changed',
+          description: 'Your password changed successfully',
+          type: 'changePassword'
+        };
+      
+        await axiosPrivate.post("/api/notification", JSON.stringify(notificationObj), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        socket.emit("changePassword", { ...notificationObj });
+      }
       
     } catch (error) {
-      console.log(error);
+      if(typeof error === 'object' && error !== null) {
+        const err = error as { response: { data: { message: string } } };
+        toast.error(err?.response?.data?.message);
+      }
     }
   }
 

@@ -39,7 +39,7 @@ const CardItem = (
       {" "}
       <div className="image-and-action-area-wrapper">
         <Link href={`/products/${props.id}`} className="thumbnail-preview">
-          <div className="badge">
+          {props.discount && <div className="badge">
             <span>
               {props.discount}% <br />
               Off
@@ -50,7 +50,7 @@ const CardItem = (
               alt="bookmark"
               priority
             />
-          </div>
+          </div>}
           <Image
             src={props.image}
             width={300}
@@ -95,7 +95,7 @@ const CardItem = (
         </Link>
         <div className="price-area">
           <span className="current">${props.price.toFixed(2)}</span>
-          <div className="previous">${props.value.toFixed(2)}</div>
+          {props.value && <div className="previous">${props.value.toFixed(2)}</div>}
         </div>
         <div className="cart-counter-action">
           <div className="quantity-edit">

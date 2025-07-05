@@ -39,7 +39,7 @@ const AddProduct = () => {
       });      
 
       if(response.status === 200) {
-        setProductItems({});
+        setProductItems({} as ProductItem);
         toast.success("New product added successfully.");
       }
     } catch (error) {
@@ -58,7 +58,7 @@ const AddProduct = () => {
             type="text" 
             placeholder="Enter title:" 
             id="title"
-            value={productItems.title as string}
+            value={(productItems.title || "") as string}
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -72,7 +72,7 @@ const AddProduct = () => {
           <input 
             type="date" 
             id="lifespan"
-            value={productItems.life as string} 
+            value={(productItems.life || new Date().toISOString().split('T')[0]) as string} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -89,7 +89,7 @@ const AddProduct = () => {
             type="number" 
             id="Discount"
             placeholder="Discount:" 
-            value={productItems.discount as number} 
+            value={(productItems.discount || 0) as number} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -104,7 +104,7 @@ const AddProduct = () => {
             type="number" 
             id="price"
             placeholder="Price:" 
-            value={productItems.price as number} 
+            value={(productItems.price || 0) as number} 
             onChange={(e) => setProductItems((prev) => {
               return {
                 ...prev,
@@ -124,7 +124,7 @@ const AddProduct = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Select tags:"
-            value={productItems.tags as OptionType[]}
+            value={(productItems.tags || []) as OptionType[]}
             onChange={(selectedOption) => setProductItems((prev) => {               
               return {
                 ...prev,
@@ -144,7 +144,7 @@ const AddProduct = () => {
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Select categories:"
-            value={productItems.categories as OptionType[]}
+            value={(productItems.categories || []) as OptionType[]}
             onChange={(selectedOption) => setProductItems((prev) => { 
               return {
                 ...prev,
@@ -204,7 +204,7 @@ const AddProduct = () => {
           type="text" 
           id="brand"
           placeholder="Enter brand:" 
-          value={productItems.brand as string} 
+          value={(productItems.brand || "") as string} 
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,
@@ -244,7 +244,7 @@ const AddProduct = () => {
           rows={5}
           name="description"
           id="description"
-          value={productItems.description as string}
+          value={(productItems.description || "") as string}
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,
@@ -260,7 +260,7 @@ const AddProduct = () => {
           rows={5}
           name="additionalInfo"
           id="additionalInfo"
-          value={productItems.additionalInfo as string}
+          value={(productItems.additionalInfo || "") as string}
           onChange={(e) => setProductItems((prev) => {
             return {
               ...prev,

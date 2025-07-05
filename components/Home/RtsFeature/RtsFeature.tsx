@@ -5,7 +5,6 @@ import rtsDollar from '../../../public/images/rts/rts-dollar.svg'
 import Image from 'next/image';
 
 const RtsFeature = () => {
-
     return (
         <div className="rts-feature-area rts-section-gap">
             <div className="container">

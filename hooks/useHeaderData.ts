@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FavoriteProductsAction } from "@/store/favorites-slice";
 import { LoadingSliceAction } from "@/store/loading-slice";
 import { cartSliceAction } from "@/store/cart-slice";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import useUserInfo from "./useUserInfo";
 
 export const useHeaderData = () => {
-  const [token, setToken] = useState("");
+  const user = useUserInfo();
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const accessToken: string =
-      typeof window !== "undefined" && localStorage.getItem("userInfo")
-        ? JSON.parse(localStorage.getItem("userInfo") || "{}").accessToken
-        : "";
-    setToken(accessToken);
-  }, []);
-
-  useEffect(() => {
-    if (token) {
+    if (user?.accessToken) {
       (async () => {
         dispatch(LoadingSliceAction.toggleLoading(true));
         try {
@@ -33,10 +26,10 @@ export const useHeaderData = () => {
         }
       })();
     }
-  }, [token,axiosPrivate,dispatch]);
+  }, [user?.accessToken,axiosPrivate,dispatch]);
 
   useEffect(() => {
-    if (token) {
+    if (user?.accessToken) {
       (async () => {
         dispatch(LoadingSliceAction.toggleLoading(true));
         try {
@@ -49,9 +42,9 @@ export const useHeaderData = () => {
         }
       })();
     }
-  }, [token,axiosPrivate,dispatch]);
+  }, [user?.accessToken,axiosPrivate,dispatch]);
 
   return {
-    token,
+    token: user?.accessToken,
   };
 };

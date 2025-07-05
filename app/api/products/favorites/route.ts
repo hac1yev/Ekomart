@@ -44,19 +44,13 @@ export async function GET(req: NextRequest) {
 
         if(!isValidAccessToken) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
-        }
-
-        const userResult = await pool.request().query(`
-            select userId from Users where email = '${isValidAccessToken.email}'    
-        `);
-
-        const { userId } = userResult.recordset[0];
+        }        
 
         const likedProductsResult = await pool.request().query(`
             select p.id, p.discount, p.image, p.title, p.price
             from LikedProducts lp inner join Products p
             on lp.productId = p.id
-            where userId = ${userId}
+            where userId = ${isValidAccessToken.userId}
         `);
 
         const favorites = likedProductsResult.recordset;

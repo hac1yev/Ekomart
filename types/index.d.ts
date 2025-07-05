@@ -105,3 +105,10 @@ declare type CartItem = {
   quantity: number;
   totalPrice: number;
 }
+
+declare type NotificationObjType = {
+  userId: number;
+  title: string;
+  description: string;
+  type: string;
+}

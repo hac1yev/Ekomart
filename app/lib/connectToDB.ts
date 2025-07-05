@@ -7,7 +7,7 @@ export const dbConfig = {
     password: process.env.DB_PASSWORD,
     options: {
         encrypt: false,
-        trustedConnection: false
+        trustServerCertificate: true
     }
 } 
 

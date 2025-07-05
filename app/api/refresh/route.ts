@@ -16,11 +16,12 @@ export async function GET(req: NextRequest) {
         const pool = await connectToDB();
 
         const result = await pool.request().query(`
-            select email from Users where email = '${isValidRefreshToken.email}'
+            select * from Users where email = '${isValidRefreshToken.email}'
         `);        
 
         const newAccessToken = await new SignJWT({ 
             email: result.recordset[0].email,
+            userId: result.recordset[0].userId,
             role: result.recordset[0].role
         })
         .setProtectedHeader({ alg: 'HS256' })

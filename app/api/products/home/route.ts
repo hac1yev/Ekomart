@@ -12,15 +12,11 @@ export async function GET(req: NextRequest) {
         let query;
         
         if(isVerifyRefreshToken) {
-            const userResult = await pool.request().query(`
-                select userId from Users where email = '${isVerifyRefreshToken.email}'
-            `);
-
-            if (!userResult.recordset.length) {
+            if (!isVerifyRefreshToken.userId) {
                 return NextResponse.json({ message: "User not found" }, { status: 404 });
             }
 
-            const { userId } = userResult.recordset[0];
+            const userId = isVerifyRefreshToken?.userId;
 
             query = `
                 select p.*, c.label [categories], t.label [tags],

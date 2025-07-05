@@ -25,7 +25,7 @@ const HomeWrapper = () => {
     useEffect(() => {
         (async function() {
             try {
-                const response = await axios.get("/api/products/home");
+                const response = await axios.get("/api/products/home");                
                 dispatch(homePageSliceAction.getAllHomeData(response.data));
             } catch (error) {   
                 console.log(error);

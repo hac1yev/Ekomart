@@ -2,22 +2,39 @@ import { socket } from "@/socket-client";
 import { notificationSliceAction, useTypedNotificationSelector } from "@/store/notification-slice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import useAxiosPrivate from "./useAxiosPrivate";
+import useUserInfo from "./useUserInfo";
 
 const useNotification = () => {
-    const dispatch = useDispatch();
     const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications);
+    const axiosPrivate = useAxiosPrivate();
+    const dispatch = useDispatch();
+    const user = useUserInfo();
 
     useEffect(() => {
-        const handleNotification = ({userId}: { userId: number }) => {
-            dispatch(notificationSliceAction.addNotification(userId.toString()));
+        if(user?.accessToken) {
+            (async function() {
+                try {
+                    const response = await axiosPrivate.get("/api/notification");
+                    dispatch(notificationSliceAction.getAllNotifications(response.data.notifications));
+                } catch (error) {
+                    console.log(error);
+                }
+            })();
+        }
+    }, [axiosPrivate,user?.accessToken,dispatch]);
+
+    useEffect(() => {
+        const handleNotification = (data: NotificationObjType) => {
+            dispatch(notificationSliceAction.addNotification(data));
         };
 
-        socket.on("sendSomething", handleNotification);
+        socket.on("sendChangePassword", handleNotification);
 
         return () => {
-            socket.off("sendSomething", handleNotification);
+            socket.off("sendChangePassword", handleNotification);
         }
-    });
+    }, [dispatch]);
 
     return {
         notifications

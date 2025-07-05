@@ -1,4 +1,6 @@
+import { comparePassword } from "@/app/lib/comparePassword";
 import { connectToDB } from "@/app/lib/connectToDB";
+import { hashPassword } from "@/app/lib/hashPassword";
 import { verifyJWTToken } from "@/app/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,8 +17,28 @@ export async function POST(req: NextRequest) {
         if(!isValidJwt) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
+        
+        const userResult = await pool.request().query(`
+            select password from Users where userId = ${isValidJwt.userId}
+        `);
 
-        return NextResponse.json({ message: 'Successfully changed', old_pswrd, new_pswrd });
+        const { password: currentPassword } = userResult.recordset[0];
+        
+        const passwordIsValid = await comparePassword(old_pswrd, currentPassword);
+
+        if(!passwordIsValid) {
+            return NextResponse.json({ message: 'Password is not correct!' }, { status: 401 });
+        }
+
+        const hashedNewPassword = await hashPassword(new_pswrd);
+        
+        await pool
+            .request()
+            .input("userId", isValidJwt.userId)
+            .input("password", hashedNewPassword)
+            .query("UPDATE Users SET password = @password WHERE userId = @userId");
+        
+        return NextResponse.json({ message: "Password changed successfully" });
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
     } finally {

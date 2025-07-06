@@ -20,7 +20,6 @@ const Header = () => {
   console.log(notifications);
   
   return (
-
     <>
       <div className="search-header-area-main">
         <div className="container">

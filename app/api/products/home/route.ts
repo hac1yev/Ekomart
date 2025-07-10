@@ -1,5 +1,5 @@
-import { connectToDB } from "@/app/lib/connectToDB";
-import { verifyRefreshToken } from "@/app/lib/verifyToken";
+import { connectToDB } from "@/lib/connectToDB";
+import { verifyRefreshToken } from "@/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

@@ -1,5 +1,5 @@
-import { comparePassword } from "@/app/lib/comparePassword";
-import { connectToDB } from "@/app/lib/connectToDB";
+import { comparePassword } from "@/lib/comparePassword";
+import { connectToDB } from "@/lib/connectToDB";
 import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 

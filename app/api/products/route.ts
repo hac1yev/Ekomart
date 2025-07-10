@@ -1,5 +1,5 @@
-import { connectToDB } from "@/app/lib/connectToDB";
-import { verifyJWTToken, verifyRefreshToken } from "@/app/lib/verifyToken";
+import { connectToDB } from "@/lib/connectToDB";
+import { verifyJWTToken, verifyRefreshToken } from "@/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 import sql from 'mssql';
 

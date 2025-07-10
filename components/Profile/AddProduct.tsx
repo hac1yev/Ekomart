@@ -1,6 +1,6 @@
 "use client"
 
-import { UploadButton } from "@/app/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";

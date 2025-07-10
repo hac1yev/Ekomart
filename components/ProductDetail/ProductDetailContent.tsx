@@ -3,7 +3,7 @@ import StaticRatingStar from "../RatingStar/StaticRatingStar";
 import { Forward, GitCompare, Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import moment from "moment";
-import { getAverageRating, getReviewCount } from "@/app/lib/getRating";
+import { getAverageRating, getReviewCount } from "@/lib/getRating";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import useFavorite from "@/hooks/useFavorite";
 import useShoppingCart from "@/hooks/useShoppingCart";

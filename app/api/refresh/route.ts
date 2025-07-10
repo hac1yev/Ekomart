@@ -1,5 +1,5 @@
-import { connectToDB } from "@/app/lib/connectToDB";
-import { verifyRefreshToken } from "@/app/lib/verifyToken";
+import { connectToDB } from "@/lib/connectToDB";
+import { verifyRefreshToken } from "@/lib/verifyToken";
 import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 

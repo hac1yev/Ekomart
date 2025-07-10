@@ -26,13 +26,17 @@ const useNotification = () => {
 
     useEffect(() => {
         const handleNotification = (data: NotificationObjType) => {
-            dispatch(notificationSliceAction.addNotification(data));
+            dispatch(notificationSliceAction.addNotification(data));     
+            console.log(data);
+                   
         };
 
         socket.on("sendChangePassword", handleNotification);
+        socket.on("sendCartSale", handleNotification);
 
         return () => {
             socket.off("sendChangePassword", handleNotification);
+            socket.off("sendCartSale", handleNotification);
         }
     }, [dispatch]);
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-import { verifyRefreshToken } from './app/lib/verifyToken';
+import { verifyRefreshToken } from './lib/verifyToken';
 
 const authPages = ['/login', '/register'];
 

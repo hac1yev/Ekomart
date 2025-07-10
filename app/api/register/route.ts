@@ -1,7 +1,7 @@
-import { connectToDB } from "@/app/lib/connectToDB";
+import { connectToDB } from "@/lib/connectToDB";
 import { NextRequest, NextResponse } from "next/server";
 import sql from "mssql";
-import { hashPassword } from "@/app/lib/hashPassword";
+import { hashPassword } from "@/lib/hashPassword";
 
 export async function POST(req: NextRequest) {
     const pool = await connectToDB();

@@ -1,5 +1,5 @@
-import { connectToDB } from "@/app/lib/connectToDB";
-import { verifyJWTToken } from "@/app/lib/verifyToken";
+import { connectToDB } from "@/lib/connectToDB";
+import { verifyJWTToken } from "@/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {

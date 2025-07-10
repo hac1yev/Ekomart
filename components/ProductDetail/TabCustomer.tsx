@@ -1,4 +1,4 @@
-import { getAverageRating, getReviewCount } from "@/app/lib/getRating"
+import { getAverageRating, getReviewCount } from "@/lib/getRating"
 import RatingStar from "../RatingStar/RatingStar";
 import StaticRatingStar from "../RatingStar/StaticRatingStar";
 import { FormEvent, useCallback, useMemo, useState } from "react";

@@ -1,7 +1,7 @@
-import { connectToDB } from "@/app/lib/connectToDB";
+import { connectToDB } from "@/lib/connectToDB";
 import { NextRequest, NextResponse } from "next/server";
 import sql from 'mssql';
-import { verifyJWTToken } from "@/app/lib/verifyToken";
+import { verifyJWTToken } from "@/lib/verifyToken";
 
 export async function POST(req: NextRequest) {
     const pool = await connectToDB();
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
 
         const cartProducts = result.recordset;
 
-        return NextResponse.json({ cartProducts });
+        return NextResponse.json({ cartProducts }, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({ error }, { status: 501 });

@@ -1,7 +1,7 @@
-import { comparePassword } from "@/app/lib/comparePassword";
-import { connectToDB } from "@/app/lib/connectToDB";
-import { hashPassword } from "@/app/lib/hashPassword";
-import { verifyJWTToken } from "@/app/lib/verifyToken";
+import { comparePassword } from "@/lib/comparePassword";
+import { connectToDB } from "@/lib/connectToDB";
+import { hashPassword } from "@/lib/hashPassword";
+import { verifyJWTToken } from "@/lib/verifyToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

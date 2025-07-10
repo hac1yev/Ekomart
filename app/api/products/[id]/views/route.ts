@@ -1,4 +1,4 @@
-import { connectToDB } from "@/app/lib/connectToDB";
+import { connectToDB } from "@/lib/connectToDB";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {

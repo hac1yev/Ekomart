@@ -7,35 +7,29 @@ import Image from "next/image";
 import moment from "moment";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDispatch } from "react-redux";
+import { useTypedNotificationSelector } from "@/store/notification-slice";
 
-const NotificationPopover = () => {
-    const notifications = [];
-    const userInfo = {};
-    const axiosPrivate = useAxiosPrivate();
-    const dispatch = useDispatch();
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-    const handleNotificationPopoverOpen = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget), []);
-    const handleNotificationPopoverClose = useCallback(() => setAnchorEl(null), []);
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefined, open: boolean, anchorEl: HTMLButtonElement | null, onClose: () => void }) => {
+    const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications);
+    // const userInfo = {};
+    // const axiosPrivate = useAxiosPrivate();
+    // const dispatch = useDispatch();
     
-    const markAllRead = async () => {
-        const notificationsIds = notifications.map((notification) => notification._id);
+    // const markAllRead = async () => {
+    //     const notificationsIds = notifications.map((notification) => notification._id);
         
-        try {
-            await axiosPrivate.put("/api/notification", JSON.stringify({ ids: notificationsIds, userId: userInfo?.userId }), {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    //     try {
+    //         await axiosPrivate.put("/api/notification", JSON.stringify({ ids: notificationsIds, userId: userInfo?.userId }), {
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         });
 
-            // dispatch(notificationSliceActions.readAllNotification(userInfo?.userId));  
-        } catch (error) {
-            console.log(error);
-        }
-    };        
+    //         // dispatch(notificationSliceActions.readAllNotification(userInfo?.userId));  
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };        
 
     return (
         <>
@@ -43,7 +37,7 @@ const NotificationPopover = () => {
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
-                onClose={handleNotificationPopoverClose}
+                onClose={onClose}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
@@ -84,7 +78,7 @@ const NotificationPopover = () => {
                         >
                             You have no notifications right now. Come back later.
                         </Typography>
-                        <Button variant="contained" color="primary" sx={{ color: '#fff', mt: 2, textTransform: 'capitalize' }} onClick={handleNotificationPopoverClose}>Close</Button>
+                        <Button variant="contained" color="primary" sx={{ color: '#fff', mt: 2, textTransform: 'capitalize' }} onClick={onClose}>Close</Button>
                     </Box>
                 ) : (
                     <List 
@@ -99,11 +93,11 @@ const NotificationPopover = () => {
                         }}
                     >
                         {notifications.toSorted((a,b) => {
-                            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-                            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                            const dateA = a.created_at ? new Date(a.created_at as string).getTime() : 0;
+                            const dateB = b.created_at ? new Date(b.created_at as string).getTime() : 0;
                             return dateB - dateA;
                         }).map((notification) => (
-                            <ListItemButton sx={{ px: 1 }} key={notification._id}>
+                            <ListItemButton sx={{ px: 1 }} key={notification.id as number}>
                                 <ListItemAvatar>
                                     <Avatar sx={{ bgcolor: 'primary.main' }}>
                                         <NotificationsActiveIcon />
@@ -112,7 +106,7 @@ const NotificationPopover = () => {
                                 <ListItemText primary={
                                     <Box className="flex-start" sx={{ gap: 1 }}>
                                         <Typography variant="h6">{notification.type}</Typography>
-                                        <Typography variant="subtitle1">{moment(notification.createdAt).fromNow()}</Typography>
+                                        <Typography variant="subtitle1">{moment(notification.created_at as string).fromNow()}</Typography>
                                     </Box>
                                 } secondary={
                                     <div 
@@ -125,8 +119,8 @@ const NotificationPopover = () => {
                     </List>
                 )}
                 {notifications.length > 0 && <Box className="flex-between" sx={{ width: '100%', px: 4, py: 1, borderTopLeftRadius: '30px', borderTopRightRadius: '30px', bgcolor: '#f9f9f9' }}>
-                    <Button sx={{ textTransform: 'capitalize' }} onClick={handleNotificationPopoverClose}>Cancel</Button>
-                    <Button sx={{ textTransform: 'capitalize' }} onClick={markAllRead}>Mark All Read</Button>
+                    <Button sx={{ textTransform: 'capitalize' }} onClick={onClose}>Cancel</Button>
+                    {/* <Button sx={{ textTransform: 'capitalize' }} onClick={markAllRead}>Mark All Read</Button> */}
                 </Box>}
             </Popover>
         </>

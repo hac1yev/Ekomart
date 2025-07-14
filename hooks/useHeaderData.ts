@@ -5,6 +5,7 @@ import { LoadingSliceAction } from "@/store/loading-slice";
 import { cartSliceAction } from "@/store/cart-slice";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import useUserInfo from "./useUserInfo";
+import { notificationSliceAction } from "@/store/notification-slice";
 
 export const useHeaderData = () => {
   const user = useUserInfo();
@@ -12,37 +13,28 @@ export const useHeaderData = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user?.accessToken) {
-      (async () => {
+    if(user?.accessToken) {
+      (async function() {
         dispatch(LoadingSliceAction.toggleLoading(true));
         try {
-          const response = await axiosPrivate.get("/api/products/favorites");
-          dispatch(FavoriteProductsAction.getFavoriteProducts(response.data.favorites));
-          dispatch(FavoriteProductsAction.getFavoriteCounts(response.data.favorites.length));
-        } catch (error) {
-          console.error(error);
-        } finally {
-          dispatch(LoadingSliceAction.toggleLoading(false));
-        }
-      })();
-    }
-  }, [user?.accessToken,axiosPrivate,dispatch]);
+          const [notificationData,favoritesData,cartData] = await Promise.all([
+            axiosPrivate.get("/api/notification").then((res) => res.data.notifications),
+            axiosPrivate.get("/api/products/favorites").then((res) => res.data.favorites),
+            axiosPrivate.get("/api/cart").then((res) => res.data.cartProducts)
+          ]);
 
-  useEffect(() => {
-    if (user?.accessToken) {
-      (async () => {
-        dispatch(LoadingSliceAction.toggleLoading(true));
-        try {
-          const response = await axiosPrivate.get("/api/cart");
-          dispatch(cartSliceAction.getAllCarts(response.data.cartProducts));
+          dispatch(notificationSliceAction.getAllNotifications(notificationData));
+          dispatch(FavoriteProductsAction.getFavoriteProducts(favoritesData));
+          dispatch(FavoriteProductsAction.getFavoriteCounts(favoritesData.length));
+          dispatch(cartSliceAction.getAllCarts(cartData));
         } catch (error) {
-          console.error(error);
+          console.log(error);
         } finally {
           dispatch(LoadingSliceAction.toggleLoading(false));
         }
-      })();
+      })()
     }
-  }, [user?.accessToken,axiosPrivate,dispatch]);
+  }, [axiosPrivate,user?.accessToken,dispatch]); 
 
   return {
     token: user?.accessToken,

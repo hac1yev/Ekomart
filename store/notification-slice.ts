@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 type NotificationStateType = {
     notifications: {
-        [key: string]: string | string[]
+        [key: string]: string | string[] | number | boolean | number[];
     }[]
 }
 

@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
         const refreshToken = req.cookies.get("refreshToken")?.value || "";
         const isVerifyRefreshToken = await verifyRefreshToken(refreshToken);
         
-        let query;
+        let query;        
         
         if(isVerifyRefreshToken) {
             if (!isVerifyRefreshToken.userId) {

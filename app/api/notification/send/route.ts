@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         const cron_secret = bearer?.split(" ")[1] || "";
 
         if(cron_secret !== process.env.CRON_SECRET) {
-            return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }        
         
         await pool.request()

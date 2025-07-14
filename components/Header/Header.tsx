@@ -9,16 +9,23 @@ import Search from "./Search";
 import { useTypedFavoriteSelector } from "@/store/favorites-slice";
 import { useHeaderData } from "@/hooks/useHeaderData";
 import { useTypedCartSelector } from "@/store/cart-slice";
-import useNotification from "@/hooks/useNotification";
+import { useMemo, useState } from "react";
+import NotificationPopover from "../Popovers/NotificationPopover";
+import { useTypedNotificationSelector } from "@/store/notification-slice";
 
 const Header = () => {
   const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
   const cartProducts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
+  const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications); 
   const { token } = useHeaderData();
-  const { notifications } = useNotification();
-
-  console.log(notifications);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  const open = Boolean(anchorEl);
+  const id = useMemo(() => open ? 'simple-popover' : undefined, [open]);
+
   return (
     <>
       <div className="search-header-area-main">
@@ -80,10 +87,10 @@ const Header = () => {
                     </div>
                   </Link>
                   <div className={"btn-border-only cart category-hover-header"}>
-                    <div className="d-flex align-items-center h-100 gap-3 cart-button-wrap">
+                    <div aria-describedby={id} className="d-flex align-items-center h-100 gap-3 cart-button-wrap" onClick={handleClick}>
                       <div style={{ position: "relative" }}>
                         <Bell style={{ flexShrink: 0 }} width={18} />
-                        <span
+                        {notifications.length > 0 && <span
                           className="number"
                           style={{
                             position: "absolute",
@@ -91,10 +98,16 @@ const Header = () => {
                             top: "-6px",
                           }}
                         >
-                          2
-                        </span>
+                          {notifications.length}
+                        </span>}
                       </div>
                     </div>
+                    <NotificationPopover 
+                      id={id}
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                    />
                   </div>
                   <Link
                     href={token ? "/profile" : "/login"}

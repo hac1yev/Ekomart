@@ -103,7 +103,7 @@ const Header = () => {
                     </div>
                   </Link>
                   <div className={"btn-border-only cart category-hover-header"}>
-                    <div aria-describedby={id} className="d-flex align-items-center h-100 gap-3 cart-button-wrap" onClick={handleClick}>
+                    <div aria-describedby={id} className="d-flex align-items-center h-100 gap-3 cart-button-wrap" onClick={() => handleClick}>
                       <div style={{ position: "relative" }}>
                         <Bell style={{ flexShrink: 0 }} width={18} />
                         {notifications.length > 0 && <span

@@ -15429,6 +15429,11 @@ body.sal-disabled [data-sal|=flip] {
   margin-bottom: 5px;
 }
 
+body.notification-popover-no-scroll {
+  height: 100vh;
+  padding-right: 0!important;
+}
+
 @media only screen and (min-width: 1200px) and (max-width: 1599px) {
   .single-feature-area .title {
     font-size: 14px;
@@ -15442,6 +15447,11 @@ body.sal-disabled [data-sal|=flip] {
 .search-header-area-main {
   padding: 31px 0;
   border-top: 1px solid #E2E2E2;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 100;
+  box-shadow: 0px 1px 5px #ccc;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {

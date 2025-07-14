@@ -2,7 +2,7 @@
 
 import { Avatar, Box, Button, List, ListItemAvatar, ListItemButton, ListItemText, Popover, Typography } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import Image from "next/image";
 import moment from "moment";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
@@ -31,6 +31,9 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
     //     }
     // };        
 
+
+    console.log(notifications);
+    
     return (
         <>
             <Popover
@@ -51,7 +54,7 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                     <Box 
                         className="flex-column-center" 
                         sx={{ 
-                            width: '360px', 
+                            width: '400px', 
                             bgcolor: 'background.paper',
                             px: 1, 
                             py: 4 
@@ -85,8 +88,8 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         className="notification-list"
                         sx={{ 
                             width: '100%', 
-                            maxWidth: '460px', 
-                            minWidth: '260px',  
+                            maxWidth: '400px', 
+                            minWidth: '400px',  
                             bgcolor: 'background.paper', 
                             px: 1, 
                             py: 2 
@@ -99,18 +102,19 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         }).map((notification) => (
                             <ListItemButton sx={{ px: 1 }} key={notification.id as number}>
                                 <ListItemAvatar>
-                                    <Avatar sx={{ bgcolor: 'primary.main' }}>
+                                    <Avatar sx={{ bgcolor: '#629d23' }}>
                                         <NotificationsActiveIcon />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText primary={
-                                    <Box className="flex-start" sx={{ gap: 1 }}>
-                                        <Typography variant="h6">{notification.type}</Typography>
-                                        <Typography variant="subtitle1">{moment(notification.created_at as string).fromNow()}</Typography>
+                                    <Box className="d-flex align-items-center justify-content-between" sx={{ gap: 1 }}>
+                                        <Typography variant="h6" style={{ fontWeight: 600, fontSize: '14px' }}>{notification.title}</Typography>
+                                        <Typography variant="subtitle1" style={{ fontSize: '12px', color: '#666' }}>{moment(notification.created_at as string).fromNow()}</Typography>
                                     </Box>
                                 } secondary={
                                     <div 
-                                        dangerouslySetInnerHTML={{ __html: notification.message || "" }}
+                                        dangerouslySetInnerHTML={{ __html: notification.description || "" }}
+                                        style={{ fontSize: '12px' }}
                                     >
                                     </div>
                                 } />
@@ -118,9 +122,9 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         ))}
                     </List>
                 )}
-                {notifications.length > 0 && <Box className="flex-between" sx={{ width: '100%', px: 4, py: 1, borderTopLeftRadius: '30px', borderTopRightRadius: '30px', bgcolor: '#f9f9f9' }}>
-                    <Button sx={{ textTransform: 'capitalize' }} onClick={onClose}>Cancel</Button>
-                    {/* <Button sx={{ textTransform: 'capitalize' }} onClick={markAllRead}>Mark All Read</Button> */}
+                {notifications.length > 0 && <Box className="d-flex align-items-center justify-content-between" sx={{ width: '100%', px: 4, py: 1, borderTopLeftRadius: '30px', borderTopRightRadius: '30px', bgcolor: '#f9f9f9' }}>
+                    <Button sx={{ textTransform: 'capitalize', fontSize: '13px' }} onClick={onClose}>Cancel</Button>
+                    <Button sx={{ textTransform: 'capitalize', fontSize: '13px' }}>Mark All Read</Button>
                 </Box>}
             </Popover>
         </>

@@ -9,7 +9,7 @@ import Search from "./Search";
 import { useTypedFavoriteSelector } from "@/store/favorites-slice";
 import { useHeaderData } from "@/hooks/useHeaderData";
 import { useTypedCartSelector } from "@/store/cart-slice";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NotificationPopover from "../Popovers/NotificationPopover";
 import { useTypedNotificationSelector } from "@/store/notification-slice";
 
@@ -19,12 +19,28 @@ const Header = () => {
   const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications); 
   const { token } = useHeaderData();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-
   const open = Boolean(anchorEl);
   const id = useMemo(() => open ? 'simple-popover' : undefined, [open]);
+  
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add('notification-popover-no-scroll');
+    } else {
+      document.body.classList.remove('notification-popover-no-scroll');
+    }
+
+    return () => {
+      document.body.classList.remove('notification-popover-no-scroll');
+    };
+  }, [open]);
 
   return (
     <>
@@ -102,12 +118,12 @@ const Header = () => {
                         </span>}
                       </div>
                     </div>
-                    <NotificationPopover 
+                    {open && <NotificationPopover 
                       id={id}
                       open={open}
                       anchorEl={anchorEl}
                       onClose={handleClose}
-                    />
+                    />}
                   </div>
                   <Link
                     href={token ? "/profile" : "/login"}

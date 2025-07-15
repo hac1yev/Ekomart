@@ -27,18 +27,7 @@ export async function GET(req: NextRequest) {
             where p.id = ${id}
         `;
     } else {
-      const userResult = await pool.request().query(`
-            select userId from Users where email = '${isValidRefreshToken.email}'
-        `);
-
-      if (!userResult.recordset.length) {
-        return NextResponse.json(
-          { message: "User not found" },
-          { status: 404 }
-        );
-      }
-
-      const { userId } = userResult.recordset[0];
+      const { userId } = isValidRefreshToken;
 
       query = `
             select p.*, c.label [categories], t.label [tags], s.label [status_content], ty.label [type_content],

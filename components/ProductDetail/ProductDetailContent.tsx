@@ -72,7 +72,7 @@ const ProductDetailContent = ({ productContent }: { productContent: ProductDetai
               >
                 {" "}
                 ${productContent.price.toFixed(2)}
-                <span className="old-price ml--15">${productContent.value.toFixed(2)}</span>
+                {productContent.value && <span className="old-price ml--15">${productContent.value.toFixed(2)}</span>}
               </span>
               <div className="product-bottom-action">
                 <div className="cart-edits">

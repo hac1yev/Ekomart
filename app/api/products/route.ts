@@ -29,15 +29,7 @@ export async function GET(req: NextRequest) {
                 on pt.tagId = t.value
             `;
         }else{
-            const userResult = await pool.request().query(`
-                select userId from Users where email = '${isVerifyRefreshToken.email}'
-            `);
-
-            if (!userResult.recordset.length) {
-                return NextResponse.json({ message: "User not found" }, { status: 404 });
-            }
-
-            const { userId } = userResult.recordset[0];
+            const { userId } = isVerifyRefreshToken;
             
             query = `
                 select p.*, c.label [categories], t.label [tags],

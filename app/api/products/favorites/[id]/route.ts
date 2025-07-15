@@ -16,11 +16,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
 
-        const userResult = await pool.request().query(`
-            select userId from Users where email = '${isValidAccessToken.email}'    
-        `);
-
-        const { userId } = userResult.recordset[0];
+        const { userId } = isValidAccessToken;
 
         await pool.request().query(`
             delete from LikedProducts where userId = ${userId} and productId = ${productId}

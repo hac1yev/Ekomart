@@ -18,11 +18,11 @@ const Header = () => {
   const cartProducts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
   const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications); 
   const { token } = useHeaderData();
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const open = Boolean(anchorEl);
   const id = useMemo(() => open ? 'simple-popover' : undefined, [open]);
   
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   }
 
@@ -103,7 +103,7 @@ const Header = () => {
                     </div>
                   </Link>
                   <div className={"btn-border-only cart category-hover-header"}>
-                    <div aria-describedby={id} className="d-flex align-items-center h-100 gap-3 cart-button-wrap" onClick={() => handleClick}>
+                    <div aria-describedby={id} className="d-flex align-items-center h-100 gap-3 cart-button-wrap" onClick={handleClick}>
                       <div style={{ position: "relative" }}>
                         <Bell style={{ flexShrink: 0 }} width={18} />
                         {notifications.length > 0 && <span

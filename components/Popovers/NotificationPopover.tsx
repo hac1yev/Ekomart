@@ -9,7 +9,7 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDispatch } from "react-redux";
 import { useTypedNotificationSelector } from "@/store/notification-slice";
 
-const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefined, open: boolean, anchorEl: HTMLButtonElement | null, onClose: () => void }) => {
+const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefined, open: boolean, anchorEl: HTMLDivElement | null, onClose: () => void }) => {
     const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications);
     // const userInfo = {};
     // const axiosPrivate = useAxiosPrivate();

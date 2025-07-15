@@ -2,11 +2,11 @@
 
 import { Avatar, Box, Button, List, ListItemAvatar, ListItemButton, ListItemText, Popover, Typography } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { memo, useState } from "react";
+import { memo } from "react";
 import Image from "next/image";
 import moment from "moment";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { useDispatch } from "react-redux";
+// import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+// import { useDispatch } from "react-redux";
 import { useTypedNotificationSelector } from "@/store/notification-slice";
 
 const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefined, open: boolean, anchorEl: HTMLDivElement | null, onClose: () => void }) => {

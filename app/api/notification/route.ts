@@ -51,8 +51,10 @@ export async function GET(req: NextRequest) {
         const result = await pool.request().query(`
             select * from Notification where userId = ${isValidJwt.userId}
         `);
+
+        const unReadNotifications = result.recordset.filter((notification) => notification.isRead !== 0);
         
-        return NextResponse.json({ notifications: result.recordset }, { status: 200 });
+        return NextResponse.json({ notifications: unReadNotifications }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
     } finally {

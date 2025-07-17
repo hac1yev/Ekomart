@@ -107,8 +107,12 @@ declare type CartItem = {
 }
 
 declare type NotificationObjType = {
+  id: number;
   userId: number;
   title: string;
   description: string;
   type: string;
+  url: string;
+  isRead: boolean;
+  created_at: string;
 }

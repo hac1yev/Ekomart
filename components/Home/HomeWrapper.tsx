@@ -10,17 +10,9 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { homePageSliceAction } from '@/store/home-slice';
 import axios from 'axios';
-import { socket } from '@/socket-client';
 
 const HomeWrapper = () => {
-    const dispatch = useDispatch();
-    const userId: number = typeof window !== "undefined" && localStorage.getItem("userInfo") 
-        ? JSON.parse(localStorage.getItem("userInfo") || "{}").userId 
-        : "";     
-
-    useEffect(() => {
-        socket.emit("newUser", userId);
-    }, [userId]);
+    const dispatch = useDispatch();    
 
     useEffect(() => {
         (async function() {

@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         const { password: currentPassword } = userResult.recordset[0];
         
         const passwordIsValid = await comparePassword(old_pswrd, currentPassword);
-
+            
         if(!passwordIsValid) {
             return NextResponse.json({ message: 'Password is not correct!' }, { status: 401 });
         }

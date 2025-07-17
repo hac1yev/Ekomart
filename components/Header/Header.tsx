@@ -11,12 +11,12 @@ import { useHeaderData } from "@/hooks/useHeaderData";
 import { useTypedCartSelector } from "@/store/cart-slice";
 import { useEffect, useMemo, useState } from "react";
 import NotificationPopover from "../Popovers/NotificationPopover";
-import { useTypedNotificationSelector } from "@/store/notification-slice";
+import useNotification from "@/hooks/useNotification";
 
 const Header = () => {
   const favoritesCount = useTypedFavoriteSelector((state) => state.favoriteReducer.favoritesCount);
   const cartProducts = useTypedCartSelector((state) => state.cartReducer.cartProducts);
-  const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications); 
+  const { notifications } = useNotification();
   const { token } = useHeaderData();
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const open = Boolean(anchorEl);

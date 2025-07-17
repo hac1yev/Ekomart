@@ -8,8 +8,8 @@ const useNotification = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const handleNotification = (data: NotificationObjType) => {
-            dispatch(notificationSliceAction.addNotification(data));                        
+        const handleNotification = (data: NotificationObjType) => {            
+            dispatch(notificationSliceAction.addNotification(data));     
         };
 
         socket.on("sendChangePassword", handleNotification);

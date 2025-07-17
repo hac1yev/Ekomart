@@ -8,6 +8,7 @@ import moment from "moment";
 // import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 // import { useDispatch } from "react-redux";
 import { useTypedNotificationSelector } from "@/store/notification-slice";
+import noNotification from '../../public/images/no-notification.png';
 
 const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefined, open: boolean, anchorEl: HTMLDivElement | null, onClose: () => void }) => {
     const notifications = useTypedNotificationSelector((state) => state.notificationReducer.notifications);
@@ -30,10 +31,8 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
     //         console.log(error);
     //     }
     // };        
+        
 
-
-    console.log(notifications);
-    
     return (
         <>
             <Popover
@@ -52,7 +51,7 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
             >
                 {notifications.length === 0 ? (
                     <Box 
-                        className="flex-column-center" 
+                        className="d-flex flex-col align-items-center justify-content-center" 
                         sx={{ 
                             width: '400px', 
                             bgcolor: 'background.paper',
@@ -61,16 +60,17 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         }}
                     >
                         <Image 
-                            src={"/no-notification.jpg"}
+                            src={noNotification}
                             width={"230"}
                             height={"230"}
                             alt="logo"
                             priority
                         />
-                        <Typography variant="h5">No Notifications Yet!</Typography>
+                        <Typography sx={{ fontSize: '18px', fontWeight: '600', color: '#333' }}>No Notifications Yet!</Typography>
                         <Typography 
                             sx={{ 
-                                fontSize: '16px',
+                                fontSize: '14px',
+                                width: '280px',
                                 fontWeight: '400',
                                 lineHeight: '18px',
                                 color: '#9D9D9B',
@@ -81,7 +81,7 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         >
                             You have no notifications right now. Come back later.
                         </Typography>
-                        <Button variant="contained" color="primary" sx={{ color: '#fff', mt: 2, textTransform: 'capitalize' }} onClick={onClose}>Close</Button>
+                        <Button variant="contained" sx={{ bgcolor: '#629d23', width: '80px', fontSize: '14px', color: '#fff', mt: 2, textTransform: 'capitalize' }} onClick={onClose}>Close</Button>
                     </Box>
                 ) : (
                     <List 
@@ -96,11 +96,11 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                         }}
                     >
                         {notifications.toSorted((a,b) => {
-                            const dateA = a.created_at ? new Date(a.created_at as string).getTime() : 0;
-                            const dateB = b.created_at ? new Date(b.created_at as string).getTime() : 0;
+                            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
                             return dateB - dateA;
                         }).map((notification) => (
-                            <ListItemButton sx={{ px: 1 }} key={notification.id as number}>
+                            <ListItemButton sx={{ px: 1 }} key={notification.id}>
                                 <ListItemAvatar>
                                     <Avatar sx={{ bgcolor: '#629d23' }}>
                                         <NotificationsActiveIcon />
@@ -109,7 +109,7 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                                 <ListItemText primary={
                                     <Box className="d-flex align-items-center justify-content-between" sx={{ gap: 1 }}>
                                         <Typography variant="h6" style={{ fontWeight: 600, fontSize: '14px' }}>{notification.title}</Typography>
-                                        <Typography variant="subtitle1" style={{ fontSize: '12px', color: '#666' }}>{moment(notification.created_at as string).fromNow()}</Typography>
+                                        <Typography variant="subtitle1" style={{ fontSize: '12px', color: '#666' }}>{moment(notification.created_at).fromNow()}</Typography>
                                     </Box>
                                 } secondary={
                                     <div 
@@ -123,8 +123,8 @@ const NotificationPopover = ({ id,open,anchorEl,onClose }: { id: string | undefi
                     </List>
                 )}
                 {notifications.length > 0 && <Box className="d-flex align-items-center justify-content-between" sx={{ width: '100%', px: 4, py: 1, borderTopLeftRadius: '30px', borderTopRightRadius: '30px', bgcolor: '#f9f9f9' }}>
-                    <Button sx={{ textTransform: 'capitalize', fontSize: '13px' }} onClick={onClose}>Cancel</Button>
-                    <Button sx={{ textTransform: 'capitalize', fontSize: '13px' }}>Mark All Read</Button>
+                    <Button sx={{ color: '#629d23', textTransform: 'capitalize', fontSize: '13px' }} onClick={onClose}>Cancel</Button>
+                    <Button sx={{ color: '#629d23', textTransform: 'capitalize', fontSize: '13px' }}>Mark All Read</Button>
                 </Box>}
             </Popover>
         </>

@@ -26656,7 +26656,9 @@ header.header-three .sub-dropdown .submenu.third-lvl.base {
 }
 
 .rating-star-container .container__items > div:has(input:checked) label .star-stroke .star-fill,
-.rating-star-container .container__items > div:has(input:checked) ~ div label .star-stroke .star-fill {
+.rating-star-container .container__items > div:has(input:checked) ~ div label .star-stroke .star-fill,
+.rating-star-container .container__items > div:has(input:hover) label .star-stroke .star-fill,
+.rating-star-container .container__items > div:has(input:hover) ~ div label .star-stroke .star-fill {
   background: var(--star-colour);
 }
 

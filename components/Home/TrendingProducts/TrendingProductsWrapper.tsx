@@ -17,7 +17,7 @@ const TrendingProductsWrapper = () => {
                 key={product.id}
               >
                 <div className="single-shopping-card-one tranding-product">
-                  <Link href="/" className="thumbnail-preview">
+                  <Link href={`/products/${product.id}`} className="thumbnail-preview">
                     <div className="badge">
                       <span>
                         {product.discount}% <br />

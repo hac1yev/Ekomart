@@ -24540,6 +24540,19 @@ div.error-bg > p {
   margin-bottom: 0;
 }
 
+.checkout-wrapper label[for="f-options"],
+.checkout-wrapper label[for="f-option"],
+.checkout-wrapper label[for="s-option"], 
+.checkout-wrapper label[for="t-option"] {
+  position: relative;
+  font-size: 14px;
+  line-height: 17px;
+  color: #2C3C28;
+  font-weight: 500;
+  padding-left: 25px;
+  cursor: pointer;
+}
+
 .right-card-sidebar-checkout .cottom-cart-right-area {
   padding: 25px 30px;
 }

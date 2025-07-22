@@ -1,7 +1,8 @@
+import CheckoutWrapper from "@/components/Checkout/CheckoutWrapper";
 
 const CheckoutPage = () => {
     return (
-        <div>CheckoutPage</div>
+        <CheckoutWrapper />
     );
 };
 

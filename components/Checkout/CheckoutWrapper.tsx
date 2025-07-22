@@ -1,15 +1,12 @@
 const CheckoutWrapper = () => {
   return (
-    <div className="checkout-area rts-section-gap">
+    <div className="checkout-area rts-section-gap checkout-wrapper">
       <div className="container">
         <div className="row">
           <div className="col-lg-8 pr--40 pr_md--5 pr_sm--5 order-2 order-xl-1 order-lg-2 order-md-2 order-sm-2 mt_md--30 mt_sm--30">
             <div className="coupon-input-area-1 login-form">
               <div className="coupon-area">
-                <div className="coupon-ask">
-                  <span>Returning customers?</span>
-                  <button className="coupon-click"> Click here to login</button>
-                </div>
+                
                 <div className="coupon-input-area">
                   <div className="inner">
                     <p>

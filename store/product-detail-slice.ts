@@ -47,6 +47,19 @@ const productDetailSlice = createSlice({
             if(state.productContent) {
                 state.productContent.liked = 0;
             }
+        },
+        addRating(state,action) {
+            if(state.ratingResult) {
+                const updatedRatingResult = state.ratingResult.ratingResult.map(item => {
+                    if (item.star === action.payload) {
+                        item.count += 1;
+                    }
+
+                    return item;
+                });
+
+                state.ratingResult.ratingResult = updatedRatingResult;
+            }
         }
     }
 });

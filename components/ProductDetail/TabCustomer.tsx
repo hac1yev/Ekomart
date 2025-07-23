@@ -4,15 +4,19 @@ import StaticRatingStar from "../RatingStar/StaticRatingStar";
 import { FormEvent, useCallback, useMemo, useState } from "react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { ProductDetailSliceActions } from "@/store/product-detail-slice";
+import toast from "react-hot-toast";
 
 const TabCustomer = ({ productDetailRatingResult }: { productDetailRatingResult: ProductDetailRatingResultType }) => {
   const [ratingData,setRatingData] = useState<RatingType>({ star: null, reviewMessage: "" });
   const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
   const { id } = useParams();
   const userId: string = typeof window !== "undefined" && localStorage.getItem("userInfo") 
     ? JSON.parse(localStorage.getItem("userInfo") || "{}").userId 
     : "";  
-    
+      
   const filteredRating = useMemo(() => {
     return productDetailRatingResult.ratingResult.filter((item) => item.count !== 0);
   }, [productDetailRatingResult.ratingResult]);
@@ -47,7 +51,9 @@ const TabCustomer = ({ productDetailRatingResult }: { productDetailRatingResult:
         }
       });
       
+      dispatch(ProductDetailSliceActions.addRating(ratingData.star));
       setRatingData({ star: null, reviewMessage: "" });
+      toast.success("Rating added successfully.")
     } catch (error) {
       console.log(error);
     }

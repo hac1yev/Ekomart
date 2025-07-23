@@ -1,4 +1,3 @@
-import React from "react";
 
 const RatingStar = ({ handleChangeRating }: { handleChangeRating: (value: number) => void }) => {
   return (

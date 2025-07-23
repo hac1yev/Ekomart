@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
         const accessToken = bearer?.split(" ")[1] || "";
 
         const isValidAccessToken = await verifyJWTToken(accessToken);
-
+        
         if(!isValidAccessToken) {
             return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }        

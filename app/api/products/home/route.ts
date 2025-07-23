@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
                 on p.id = pt.productId left join Tags t
                 on pt.tagId = t.value
             `;
-        }
+        }        
 
         const result = await pool.request().query(query); 
 
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
             }
 
             return resultArr;
-        }, []);   
+        }, []);           
 
         const discountProducts = resultProducts.filter((item: ProductType) => item.status === 1).toSorted((a: ProductType, b: ProductType) => b.discount - a.discount).slice(0,4);
         const trendingProducts = resultProducts.filter((item: ProductType) => item.status === 1).toSorted((a: ProductType, b: ProductType) => b.salesCount - a.salesCount).slice(0,8);

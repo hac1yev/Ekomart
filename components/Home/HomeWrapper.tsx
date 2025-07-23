@@ -22,7 +22,7 @@ const HomeWrapper = () => {
             } catch (error) {   
                 console.log(error);
             }
-        })()
+        })();
     }, [dispatch]);    
 
     return (
